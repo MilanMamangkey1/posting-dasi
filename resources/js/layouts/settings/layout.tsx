@@ -4,26 +4,14 @@ import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { edit as editAppearance } from '@/routes/appearance';
 import { edit as editPassword } from '@/routes/password';
-import { edit } from '@/routes/profile';
-import { show } from '@/routes/two-factor';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { type PropsWithChildren } from 'react';
 
 const sidebarNavItems: NavItem[] = [
     {
-        title: 'Profile',
-        href: edit(),
-        icon: null,
-    },
-    {
         title: 'Password',
         href: editPassword(),
-        icon: null,
-    },
-    {
-        title: 'Two-Factor Auth',
-        href: show(),
         icon: null,
     },
     {
@@ -34,7 +22,6 @@ const sidebarNavItems: NavItem[] = [
 ];
 
 export default function SettingsLayout({ children }: PropsWithChildren) {
-    // When server-side rendering, we only render the layout on the client...
     if (typeof window === 'undefined') {
         return null;
     }
@@ -45,7 +32,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
         <div className="px-4 py-6">
             <Heading
                 title="Settings"
-                description="Manage your profile and account settings"
+                description="Kelola pengaturan akun seperti password dan tampilan."
             />
 
             <div className="flex flex-col lg:flex-row lg:space-x-12">
