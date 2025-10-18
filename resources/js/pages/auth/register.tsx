@@ -1,14 +1,14 @@
 import RegisteredUserController from '@/actions/App/Http/Controllers/Auth/RegisteredUserController';
 import { login } from '@/routes';
-import { Form, Head } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
-
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
+import TurnstileWidget from '@/components/turnstile-widget';
+import { Form, Head } from '@inertiajs/react';
+import { LoaderCircle } from 'lucide-react';
 
 export default function Register() {
     return (
@@ -16,7 +16,14 @@ export default function Register() {
             title="Create an account"
             description="Enter your details below to create your account"
         >
-            <Head title="Register" />
+            <Head title="Register">
+                <script
+                    key="turnstile-script"
+                    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+                    async
+                    defer
+                ></script>
+            </Head>
             <Form
                 {...RegisteredUserController.store.form()}
                 resetOnSuccess={['password', 'password_confirmation']}
@@ -89,6 +96,8 @@ export default function Register() {
                                     message={errors.password_confirmation}
                                 />
                             </div>
+
+                            <TurnstileWidget />
 
                             <Button
                                 type="submit"

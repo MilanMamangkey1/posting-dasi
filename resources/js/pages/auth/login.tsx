@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
 import { register } from '@/routes';
 import { request } from '@/routes/password';
+import TurnstileWidget from '@/components/turnstile-widget';
 import { Form, Head } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 
@@ -22,7 +23,14 @@ export default function Login({ status, canResetPassword }: LoginProps) {
             title="Log in to your account"
             description="Enter your email and password below to log in"
         >
-            <Head title="Log in" />
+            <Head title="Log in">
+                <script
+                    key="turnstile-script"
+                    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+                    async
+                    defer
+                ></script>
+            </Head>
 
             <Form
                 {...AuthenticatedSessionController.store.form()}
@@ -80,6 +88,8 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                 />
                                 <Label htmlFor="remember">Remember me</Label>
                             </div>
+
+                            <TurnstileWidget />
 
                             <Button
                                 type="submit"
