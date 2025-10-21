@@ -29,7 +29,7 @@ const resourceCards = [
         accent: 'bg-sky-500/10 text-sky-700 border-sky-500/30 dark:text-sky-200',
     },
     {
-        title: 'Galeri Foto',
+        title: 'Foto',
         description: 'Simpan foto langkah dan dokumentasi pendukung.',
         href: '/konten/foto',
         icon: ImageIcon,
@@ -68,7 +68,7 @@ const activityTimeline = [
         time: '15 Okt 2025',
     },
     {
-        title: 'Album foto "Langkah Pratt" ditambahkan',
+        title: 'Foto "Langkah Pratt" ditambahkan',
         time: '13 Okt 2025',
     },
 ];

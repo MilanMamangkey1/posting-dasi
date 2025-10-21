@@ -38,7 +38,7 @@ const mainNavItems: NavItem[] = [
         icon: PlayCircle,
     },
     {
-        title: 'Galeri Foto',
+        title: 'Foto',
         href: '/konten/foto',
         icon: ImageIcon,
     },
