@@ -4,12 +4,18 @@ use App\Http\Controllers\Content\MaterialController;
 use App\Http\Controllers\Content\NarrativeController;
 use App\Http\Controllers\Content\PhotoController;
 use App\Http\Controllers\Content\VideoController;
+use App\Http\Controllers\Consultation\AdminConsultationController;
+use App\Http\Controllers\Consultation\PublicConsultationController;
+use App\Http\Controllers\PublicSiteController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
+Route::get('/', PublicSiteController::class)->name('home');
+
+Route::get('layanan-konsultasi', [PublicConsultationController::class, 'create'])
+    ->name('public.consultation.create');
+Route::post('layanan-konsultasi', [PublicConsultationController::class, 'store'])
+    ->name('public.consultation.store');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
@@ -30,9 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('materi', [MaterialController::class, 'store'])->name('content.material.store');
     });
 
-    Route::get('konsultasi', function () {
-        return Inertia::render('consultation/index');
-    })->name('consultation.index');
+    Route::get('konsultasi', [AdminConsultationController::class, 'index'])->name('consultation.index');
 });
 
 require __DIR__.'/settings.php';

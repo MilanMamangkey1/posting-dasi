@@ -20,7 +20,7 @@ class PhotoController extends Controller
         $fotoEntries = EducationalContent::query()
             ->where('content_type', 'photo')
             ->with(['assets' => function ($query) {
-                $query->where('type', 'photo')->orderBy('ordering')->orderBy('id');
+                    $query->where('type', 'photo')->orderBy('ordering')->orderBy('id');
             }])
             ->orderByDesc('updated_at')
             ->get()
@@ -30,7 +30,7 @@ class PhotoController extends Controller
                         $url = $asset->external_url;
 
                         if (! $url && $asset->storage_path) {
-                            $url = Storage::disk('public')->url($asset->storage_path);
+                            $url = Storage::url($asset->storage_path);
                         }
 
                         return [
