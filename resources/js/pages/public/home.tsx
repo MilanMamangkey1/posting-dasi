@@ -52,9 +52,9 @@ export default function PublicHomePage() {
         <div className="min-h-screen bg-white text-black">
             <Head title="Portal Edukasi Dasi" />
             <header className="mx-auto w-full max-w-5xl px-4 py-8">
-                <h1 className="text-2xl font-semibold">Portal Edukasi Dasi</h1>
+                <h1 className="text-2xl font-semibold">Posting Dasi</h1>
                 <p className="mt-2 text-sm text-neutral-600">
-                    Jelajahi materi edukasi dan ajukan konsultasi WhatsApp kepada tim kami.
+                    Jelajahi materi edukasi mengenai Stunting.
                 </p>
             </header>
             <main className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 pb-16">
