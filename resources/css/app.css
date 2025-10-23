@@ -9,3 +9,69 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+@layer components {
+    .panel {
+        @apply space-y-6 rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur;
+    }
+
+    .panel__header {
+        @apply flex flex-wrap items-center justify-between gap-4;
+    }
+
+    .panel__sub {
+        @apply text-sm text-slate-500;
+    }
+
+    .form-field {
+        @apply flex flex-col gap-2 text-sm text-slate-700;
+    }
+
+    .form-input {
+        @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm transition focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200;
+    }
+
+    .form-hint {
+        @apply text-xs text-slate-500;
+    }
+
+    .primary-button {
+        @apply rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900;
+    }
+
+    .secondary-button {
+        @apply rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900;
+    }
+
+    .danger-button {
+        @apply rounded-lg border border-transparent bg-rose-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-rose-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700;
+    }
+
+    .refresh-button {
+        @apply text-sm font-medium text-slate-500 transition hover:text-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900;
+    }
+
+    .metric-card {
+        @apply space-y-2 rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur;
+    }
+
+    .metric-card__body {
+        @apply flex flex-col gap-1;
+    }
+
+    .metric-card__body dt {
+        @apply text-xs font-medium uppercase tracking-wide text-slate-500;
+    }
+
+    .metric-card__body dd {
+        @apply text-2xl font-semibold text-slate-900;
+    }
+
+    .metric-card__hint {
+        @apply text-xs text-slate-500;
+    }
+
+    .detail-value {
+        @apply rounded-lg border border-dashed border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-800;
+    }
+}
