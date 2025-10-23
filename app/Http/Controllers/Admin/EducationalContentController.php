@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\StoreEducationalContentRequest;
 use App\Http\Requests\Admin\UpdateEducationalContentRequest;
 use App\Models\EducationalContent;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,12 +34,18 @@ class EducationalContentController extends Controller
         );
     }
 
-    public function store(StoreEducationalContentRequest $request): JsonResponse
+    public function store(StoreEducationalContentRequest $request): JsonResponse|RedirectResponse
     {
         $payload = $this->buildPayload($request);
         $content = EducationalContent::create($payload);
 
-        return response()->json($content, Response::HTTP_CREATED);
+        if ($request->expectsJson()) {
+            return response()->json($content, Response::HTTP_CREATED);
+        }
+
+        return redirect()
+            ->to(route('admin.dashboard.ui') . '#contents')
+            ->with('admin_status', 'Konten berhasil dibuat.');
     }
 
     public function show(EducationalContent $educationalContent): JsonResponse
@@ -46,23 +53,35 @@ class EducationalContentController extends Controller
         return response()->json($educationalContent);
     }
 
-    public function update(UpdateEducationalContentRequest $request, EducationalContent $educationalContent): JsonResponse
+    public function update(UpdateEducationalContentRequest $request, EducationalContent $educationalContent): JsonResponse|RedirectResponse
     {
         $payload = $this->buildPayload($request, $educationalContent);
         $educationalContent->fill($payload);
         $educationalContent->save();
 
-        return response()->json($educationalContent->fresh());
+        if ($request->expectsJson()) {
+            return response()->json($educationalContent->fresh());
+        }
+
+        return redirect()
+            ->to(route('admin.dashboard.ui') . '#contents')
+            ->with('admin_status', 'Konten berhasil diperbarui.');
     }
 
-    public function destroy(EducationalContent $educationalContent): JsonResponse
+    public function destroy(Request $request, EducationalContent $educationalContent): JsonResponse|RedirectResponse
     {
         $this->deleteStoredFile($educationalContent);
         $educationalContent->delete();
 
-        return response()->json([
-            'message' => 'Educational content deleted successfully.',
-        ]);
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Educational content deleted successfully.',
+            ]);
+        }
+
+        return redirect()
+            ->to(route('admin.dashboard.ui') . '#contents')
+            ->with('admin_status', 'Konten berhasil dihapus.');
     }
 
     private function buildPayload(StoreEducationalContentRequest|UpdateEducationalContentRequest $request, ?EducationalContent $content = null): array
