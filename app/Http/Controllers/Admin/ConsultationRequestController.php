@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\StoreConsultationRequestRequest;
 use App\Http\Requests\Admin\UpdateConsultationRequestRequest;
 use App\Models\ConsultationRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +38,7 @@ class ConsultationRequestController extends Controller
         );
     }
 
-    public function store(StoreConsultationRequestRequest $request): JsonResponse
+    public function store(StoreConsultationRequestRequest $request): JsonResponse|RedirectResponse
     {
         $data = $request->validated();
         $data['status'] = $data['status'] ?? ConsultationRequest::STATUS_PENDING;
@@ -46,7 +47,13 @@ class ConsultationRequestController extends Controller
 
         $consultation = ConsultationRequest::create($data);
 
-        return response()->json($consultation, Response::HTTP_CREATED);
+        if ($request->expectsJson()) {
+            return response()->json($consultation, Response::HTTP_CREATED);
+        }
+
+        return redirect()
+            ->to(route('admin.dashboard.ui') . '#consultations')
+            ->with('admin_status', 'Pengajuan konsultasi baru dibuat.');
     }
 
     public function show(ConsultationRequest $consultationRequest): JsonResponse
@@ -54,7 +61,7 @@ class ConsultationRequestController extends Controller
         return response()->json($consultationRequest);
     }
 
-    public function update(UpdateConsultationRequestRequest $request, ConsultationRequest $consultationRequest): JsonResponse
+    public function update(UpdateConsultationRequestRequest $request, ConsultationRequest $consultationRequest): JsonResponse|RedirectResponse
     {
         $data = $request->validated();
 
@@ -63,16 +70,28 @@ class ConsultationRequestController extends Controller
         $consultationRequest->fill($data);
         $consultationRequest->save();
 
-        return response()->json($consultationRequest->fresh());
+        if ($request->expectsJson()) {
+            return response()->json($consultationRequest->fresh());
+        }
+
+        return redirect()
+            ->to(route('admin.dashboard.ui') . '#consultations')
+            ->with('admin_status', 'Status konsultasi diperbarui.');
     }
 
-    public function destroy(ConsultationRequest $consultationRequest): JsonResponse
+    public function destroy(Request $request, ConsultationRequest $consultationRequest): JsonResponse|RedirectResponse
     {
         $consultationRequest->delete();
 
-        return response()->json([
-            'message' => 'Consultation request deleted successfully.',
-        ]);
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Consultation request deleted successfully.',
+            ]);
+        }
+
+        return redirect()
+            ->to(route('admin.dashboard.ui') . '#consultations')
+            ->with('admin_status', 'Pengajuan konsultasi dihapus.');
     }
 
     private function applyHandlingDefaults(array &$data, Request $request, ?ConsultationRequest $existing = null): void

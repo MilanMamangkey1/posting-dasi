@@ -21,9 +21,17 @@ Route::post('/logout', [LoginController::class, 'destroy'])
     ->name('logout');
 
 Route::middleware('auth')->group(function (): void {
-    Route::view('/admin', 'admin.dashboard')->name('admin.dashboard.ui');
+    Route::prefix('admin')->group(function (): void {
+        Route::get('/', [AdminDashboardController::class, 'view'])->name('admin.dashboard.ui');
 
-    Route::prefix('admin/api')
+        Route::post('/contents', [EducationalContentController::class, 'store'])->name('admin.contents.store');
+        Route::put('/contents/{educational_content}', [EducationalContentController::class, 'update'])->name('admin.contents.update');
+        Route::delete('/contents/{educational_content}', [EducationalContentController::class, 'destroy'])->name('admin.contents.destroy');
+
+        Route::put('/consultations/{consultation_request}', [ConsultationRequestController::class, 'update'])->name('admin.consultations.update');
+        Route::delete('/consultations/{consultation_request}', [ConsultationRequestController::class, 'destroy'])->name('admin.consultations.destroy');
+
+        Route::prefix('api')
         ->name('admin.api.')
         ->group(function (): void {
             Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
@@ -34,4 +42,5 @@ Route::middleware('auth')->group(function (): void {
             Route::apiResource('consultation-requests', ConsultationRequestController::class)
                 ->except(['create', 'edit']);
         });
+    });
 });
