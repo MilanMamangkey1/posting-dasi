@@ -23,6 +23,8 @@ Route::post('/logout', [LoginController::class, 'destroy'])
 Route::middleware('auth')->group(function (): void {
     Route::prefix('admin')->group(function (): void {
         Route::get('/', [AdminDashboardController::class, 'view'])->name('admin.dashboard.ui');
+        Route::get('/contents', [AdminDashboardController::class, 'contents'])->name('admin.contents.index');
+        Route::get('/consultations', [AdminDashboardController::class, 'consultations'])->name('admin.consultations.index');
 
         Route::post('/contents', [EducationalContentController::class, 'store'])->name('admin.contents.store');
         Route::put('/contents/{educational_content}', [EducationalContentController::class, 'update'])->name('admin.contents.update');

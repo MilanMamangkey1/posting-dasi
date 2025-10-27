@@ -16,10 +16,21 @@ class AdminDashboardController extends Controller
         return response()->json($this->gatherDashboardPayload());
     }
 
-    public function view(Request $request): View
+    public function view(): View
     {
         $dashboard = $this->gatherDashboardPayload();
 
+        return view('admin.dashboard', [
+            'metrics' => $dashboard['metrics'],
+            'recentContents' => $dashboard['recent_contents'],
+            'recentConsultations' => $dashboard['recent_consultations'],
+            'statusMessage' => session('admin_status'),
+            'statusError' => session('admin_error'),
+        ]);
+    }
+
+    public function contents(Request $request): View
+    {
         $contentFilters = [
             'type' => $request->query('content_type'),
             'search' => $request->query('content_search'),
@@ -32,8 +43,18 @@ class AdminDashboardController extends Controller
         if ($contentFilters['search']) {
             $contentsQuery->where('title', 'like', '%' . $contentFilters['search'] . '%');
         }
-        $contents = $contentsQuery->paginate(10)->withQueryString();
 
+        return view('admin.contents', [
+            'contents' => $contentsQuery->paginate(10)->withQueryString(),
+            'contentFilters' => $contentFilters,
+            'contentTypes' => EducationalContent::TYPES,
+            'statusMessage' => session('admin_status'),
+            'statusError' => session('admin_error'),
+        ]);
+    }
+
+    public function consultations(Request $request): View
+    {
         $consultationFilters = [
             'status' => $request->query('consultation_status'),
             'search' => $request->query('consultation_search'),
@@ -50,16 +71,9 @@ class AdminDashboardController extends Controller
                     ->orWhere('whatsapp_number', 'like', '%' . $search . '%');
             });
         }
-        $consultations = $consultationsQuery->paginate(10)->withQueryString();
 
-        return view('admin.dashboard', [
-            'metrics' => $dashboard['metrics'],
-            'recentContents' => $dashboard['recent_contents'],
-            'recentConsultations' => $dashboard['recent_consultations'],
-            'contents' => $contents,
-            'contentFilters' => $contentFilters,
-            'contentTypes' => EducationalContent::TYPES,
-            'consultations' => $consultations,
+        return view('admin.consultations', [
+            'consultations' => $consultationsQuery->paginate(10)->withQueryString(),
             'consultationFilters' => $consultationFilters,
             'consultationStatuses' => ConsultationRequest::STATUSES,
             'statusMessage' => session('admin_status'),

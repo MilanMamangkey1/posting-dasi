@@ -52,7 +52,7 @@ class ConsultationRequestController extends Controller
         }
 
         return redirect()
-            ->to(route('admin.dashboard.ui') . '#consultations')
+            ->route('admin.consultations.index')
             ->with('admin_status', 'Pengajuan konsultasi baru dibuat.');
     }
 
@@ -75,7 +75,7 @@ class ConsultationRequestController extends Controller
         }
 
         return redirect()
-            ->to(route('admin.dashboard.ui') . '#consultations')
+            ->route('admin.consultations.index')
             ->with('admin_status', 'Status konsultasi diperbarui.');
     }
 
@@ -90,7 +90,7 @@ class ConsultationRequestController extends Controller
         }
 
         return redirect()
-            ->to(route('admin.dashboard.ui') . '#consultations')
+            ->route('admin.consultations.index')
             ->with('admin_status', 'Pengajuan konsultasi dihapus.');
     }
 

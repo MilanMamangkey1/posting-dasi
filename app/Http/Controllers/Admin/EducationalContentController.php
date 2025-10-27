@@ -44,7 +44,7 @@ class EducationalContentController extends Controller
         }
 
         return redirect()
-            ->to(route('admin.dashboard.ui') . '#contents')
+            ->route('admin.contents.index')
             ->with('admin_status', 'Konten berhasil dibuat.');
     }
 
@@ -64,7 +64,7 @@ class EducationalContentController extends Controller
         }
 
         return redirect()
-            ->to(route('admin.dashboard.ui') . '#contents')
+            ->route('admin.contents.index')
             ->with('admin_status', 'Konten berhasil diperbarui.');
     }
 
@@ -80,7 +80,7 @@ class EducationalContentController extends Controller
         }
 
         return redirect()
-            ->to(route('admin.dashboard.ui') . '#contents')
+            ->route('admin.contents.index')
             ->with('admin_status', 'Konten berhasil dihapus.');
     }
 
