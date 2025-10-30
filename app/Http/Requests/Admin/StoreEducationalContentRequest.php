@@ -18,30 +18,39 @@ class StoreEducationalContentRequest extends FormRequest
      */
     public function rules(): array
     {
+        $type = $this->input('type');
+
         return [
             'title' => ['required', 'string', 'max:255'],
             'type' => ['required', 'string', Rule::in(EducationalContent::TYPES)],
             'summary' => ['nullable', 'string'],
             'body' => [
                 Rule::when(
-                    fn () => in_array($this->input('type'), [EducationalContent::TYPE_NARRATIVE, EducationalContent::TYPE_MATERIAL], true),
+                    fn () => $type === EducationalContent::TYPE_NARRATIVE,
                     ['required', 'string'],
                     ['nullable', 'string']
                 ),
             ],
             'source_url' => [
                 Rule::when(
-                    fn () => $this->input('type') === EducationalContent::TYPE_VIDEO,
+                    fn () => $type === EducationalContent::TYPE_VIDEO,
                     ['required', 'string', 'url', 'regex:/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//i'],
                     ['nullable', 'string']
                 ),
             ],
             'file' => [
                 Rule::when(
-                    fn () => $this->input('type') === EducationalContent::TYPE_PHOTO,
-                    ['required', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
-                    ['prohibited']
+                    fn () => $type === EducationalContent::TYPE_PHOTO,
+                    ['required', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120']
                 ),
+                Rule::when(
+                    fn () => $type === EducationalContent::TYPE_MATERIAL,
+                    ['required', 'file', 'mimes:pdf,doc,docx,ppt,pptx', 'max:10240']
+                ),
+                Rule::when(
+                    fn () => ! in_array($type, [EducationalContent::TYPE_PHOTO, EducationalContent::TYPE_MATERIAL], true),
+                    ['prohibited']
+                )
             ],
         ];
     }

@@ -7,7 +7,7 @@
         <title>@yield('title', 'Admin Dashboard')</title>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="min-h-screen bg-slate-100 font-sans text-slate-900 antialiased">
+    <body class="min-h-screen bg-white font-sans text-slate-900 antialiased">
         <div class="min-h-screen">
             @yield('body')
         </div>

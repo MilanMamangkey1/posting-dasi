@@ -92,23 +92,28 @@ class EducationalContentController extends Controller
         $data['type'] = $type;
 
         $isPhoto = $type === EducationalContent::TYPE_PHOTO;
+        $isMaterial = $type === EducationalContent::TYPE_MATERIAL;
 
-        if ($isPhoto) {
+        if ($isPhoto || $isMaterial) {
             if ($request->hasFile('file')) {
                 if ($content?->file_path) {
                     $this->deleteStoredFile($content);
                 }
 
-                $storedPath = $request->file('file')->store('education/photos', 'public');
+                $directory = $isPhoto ? 'education/photos' : 'education/materials';
+                $storedPath = $request->file('file')->store($directory, 'public');
 
                 $data['file_path'] = $storedPath;
                 $data['file_size_bytes'] = $request->file('file')->getSize();
+            } elseif (! $content?->file_path) {
+                $data['file_path'] = null;
+                $data['file_size_bytes'] = null;
             }
 
             $data['body'] = null;
             $data['source_url'] = null;
         } else {
-            if ($content?->type === EducationalContent::TYPE_PHOTO && $content->file_path) {
+            if ($content && $content->file_path && in_array($content->type, [EducationalContent::TYPE_PHOTO, EducationalContent::TYPE_MATERIAL], true)) {
                 $this->deleteStoredFile($content);
             }
 
@@ -120,7 +125,7 @@ class EducationalContentController extends Controller
             $sourceUrl = $data['source_url'] ?? $content?->source_url;
             $data['source_url'] = $sourceUrl;
             $data['body'] = null;
-        } elseif (in_array($type, [EducationalContent::TYPE_NARRATIVE, EducationalContent::TYPE_MATERIAL], true)) {
+        } elseif ($type === EducationalContent::TYPE_NARRATIVE) {
             $data['body'] = $data['body'] ?? $content?->body;
             $data['source_url'] = null;
         } else {

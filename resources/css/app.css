@@ -12,7 +12,7 @@
 
 @layer components {
     .panel {
-        @apply space-y-6 rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur;
+        @apply space-y-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm backdrop-blur;
     }
 
     .panel__header {
@@ -28,7 +28,7 @@
     }
 
     .form-input {
-        @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm transition focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200;
+        @apply w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm transition focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600;
     }
 
     .form-hint {
@@ -36,23 +36,23 @@
     }
 
     .primary-button {
-        @apply rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900;
+        @apply rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-red-600 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600;
     }
 
     .secondary-button {
-        @apply rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900;
+        @apply rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-red-600 shadow-sm transition hover:border-slate-300 hover:text-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600;
     }
 
     .danger-button {
-        @apply rounded-lg border border-transparent bg-rose-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-rose-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700;
+        @apply rounded-lg border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-red-600 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600;
     }
 
     .refresh-button {
-        @apply text-sm font-medium text-slate-500 transition hover:text-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900;
+        @apply text-sm font-medium text-red-600 transition hover:text-red-600 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600;
     }
 
     .metric-card {
-        @apply space-y-2 rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur;
+        @apply space-y-2 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm backdrop-blur;
     }
 
     .metric-card__body {
@@ -60,18 +60,26 @@
     }
 
     .metric-card__body dt {
-        @apply text-xs font-medium uppercase tracking-wide text-slate-500;
+        @apply text-xs font-medium uppercase tracking-wide text-red-600;
     }
 
     .metric-card__body dd {
-        @apply text-2xl font-semibold text-slate-900;
+        @apply text-2xl font-semibold text-red-600;
     }
 
     .metric-card__hint {
-        @apply text-xs text-slate-500;
+        @apply text-xs text-red-600;
     }
 
     .detail-value {
-        @apply rounded-lg border border-dashed border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-800;
+        @apply rounded-lg border border-dashed border-slate-200 bg-white px-3 py-2 text-sm text-slate-700;
+    }
+
+    .accent-badge {
+        @apply inline-flex items-center justify-center rounded-full border border-red-600 bg-white text-red-600;
+    }
+
+    .accent-link {
+        @apply text-sm font-semibold text-red-600 hover:text-red-600 hover:underline;
     }
 }

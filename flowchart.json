@@ -1,0 +1,174 @@
+{
+  "title": "Alur Backend Website Posting Dasi",
+  "description": "Representasi terstruktur dari proses backend Website Posting Dasi dengan antarmuka publik sederhana untuk menampilkan konten dan menerima konsultasi.",
+  "lanes": [
+    {
+      "id": "admin_backend",
+      "label": "Operasional Backend Admin",
+      "actors": [
+        "Admin"
+      ],
+      "steps": [
+        {
+          "id": "admin_start",
+          "type": "start",
+          "label": "Mulai",
+          "next": [
+            "admin_login"
+          ]
+        },
+        {
+          "id": "admin_login",
+          "type": "process",
+          "label": "ADMIN",
+          "next": [
+            "admin_dashboard"
+          ]
+        },
+        {
+          "id": "admin_dashboard",
+          "type": "process",
+          "label": "Dashboard Backend",
+          "next": [
+            "content_management",
+            "consultation_management"
+          ]
+        },
+        {
+          "id": "content_management",
+          "type": "process",
+          "label": "Manajemen Konten Edukasi",
+          "resources": [
+            "video_asset",
+            "photo_asset",
+            "narrative_asset",
+            "material_asset"
+          ],
+          "next": [
+            "content_validation"
+          ]
+        },
+        {
+          "id": "content_validation",
+          "type": "validation",
+          "label": "Validasi & Penyimpanan Konten",
+          "rules": [
+            "Video harus berupa tautan YouTube untuk kebutuhan embed.",
+            "Foto hanya diterima bila format kompatibel (JPG, JPEG, PNG, GIF, WEBP) dan ukuran <= 5 MB.",
+            "Narasi dan materi disimpan sebagai teks backend tanpa unggahan dokumen."
+          ],
+          "next": [
+            "content_archival"
+          ]
+        },
+        {
+          "id": "content_archival",
+          "type": "data_store",
+          "label": "Arsip Konten Edukasi",
+          "next": []
+        },
+        {
+          "id": "consultation_management",
+          "type": "process",
+          "label": "Manajemen Permintaan Konsultasi",
+          "next": [
+            "consultation_form_setup"
+          ]
+        },
+        {
+          "id": "consultation_form_setup",
+          "type": "form",
+          "label": "Form Konsultasi Backend",
+          "form_fields": [
+            {
+              "id": "full_name",
+              "label": "Nama",
+              "input_type": "text",
+              "required": true
+            },
+            {
+              "id": "address",
+              "label": "Alamat",
+              "input_type": "textarea",
+              "required": true
+            },
+            {
+              "id": "issue_description",
+              "label": "Deskripsi Permasalahan",
+              "input_type": "textarea",
+              "required": true
+            },
+            {
+              "id": "whatsapp_number",
+              "label": "Nomor WhatsApp",
+              "input_type": "phone",
+              "format": "E.164",
+              "required": true
+            }
+          ],
+          "next": [
+            "consultation_queue"
+          ]
+        },
+        {
+          "id": "consultation_queue",
+          "type": "data_store",
+          "label": "Antrian Pengajuan Konsultasi",
+          "next": []
+        }
+      ],
+      "artifacts": [
+        {
+          "id": "video_asset",
+          "type": "media",
+          "label": "Video (YouTube Embed)",
+          "constraints": {
+            "accepted_sources": [
+              "https://www.youtube.com",
+              "https://youtube.com",
+              "https://youtu.be"
+            ],
+            "storage": "Sistem hanya menyimpan referensi tautan video (tanpa file fisik)."
+          }
+        },
+        {
+          "id": "photo_asset",
+          "type": "media",
+          "label": "Foto",
+          "constraints": {
+            "max_size_mb": 5,
+            "accepted_formats": [
+              "jpg",
+              "jpeg",
+              "png",
+              "gif",
+              "webp"
+            ]
+          }
+        },
+        {
+          "id": "narrative_asset",
+          "type": "content",
+          "label": "Narasi"
+        },
+        {
+          "id": "material_asset",
+          "type": "content",
+          "label": "Materi"
+        }
+      ]
+    }
+  ],
+  "handoffs": [
+    {
+      "from": "content_validation",
+      "to": "content_archival",
+      "description": "Konten yang lolos validasi disimpan dalam arsip backend."
+    },
+    {
+      "from": "consultation_form_setup",
+      "to": "consultation_queue",
+      "description": "Data formulir konsultasi tersimpan dalam antrian backend untuk ditindaklanjuti admin."
+    }
+  ]
+}

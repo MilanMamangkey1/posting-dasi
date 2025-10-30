@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreConsultationRequestRequest;
 use App\Http\Requests\Admin\UpdateConsultationRequestRequest;
+use App\Models\ArchivedConsultationRequest;
 use App\Models\ConsultationRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class ConsultationRequestController extends Controller
@@ -67,6 +69,45 @@ class ConsultationRequestController extends Controller
 
         $this->applyHandlingDefaults($data, $request, $consultationRequest);
 
+        $shouldArchive = ($data['status'] ?? null) === ConsultationRequest::STATUS_RESOLVED;
+
+        if ($shouldArchive) {
+            $archivePayload = DB::transaction(function () use ($consultationRequest, $data) {
+                $consultationRequest->fill($data);
+                $consultationRequest->status = ConsultationRequest::STATUS_RESOLVED;
+                $consultationRequest->save();
+
+                $archived = ArchivedConsultationRequest::create([
+                    'consultation_request_id' => $consultationRequest->id,
+                    'full_name' => $consultationRequest->full_name,
+                    'address' => $consultationRequest->address,
+                    'issue_description' => $consultationRequest->issue_description,
+                    'whatsapp_number' => $consultationRequest->whatsapp_number,
+                    'status' => ConsultationRequest::STATUS_RESOLVED,
+                    'admin_notes' => $consultationRequest->admin_notes,
+                    'handled_at' => $consultationRequest->handled_at,
+                    'handled_by' => $consultationRequest->handled_by,
+                    'resolved_at' => $consultationRequest->handled_at ?? now(),
+                    'archived_at' => now(),
+                ]);
+
+                $consultationRequest->delete();
+
+                return $archived;
+            });
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Pengajuan konsultasi selesai dan telah diarsipkan.',
+                    'archive' => $archivePayload,
+                ]);
+            }
+
+            return redirect()
+                ->route('admin.consultations.index')
+                ->with('admin_status', 'Pengajuan konsultasi telah diselesaikan dan dipindahkan ke arsip.');
+        }
+
         $consultationRequest->fill($data);
         $consultationRequest->save();
 
@@ -85,7 +126,7 @@ class ConsultationRequestController extends Controller
 
         if ($request->expectsJson()) {
             return response()->json([
-                'message' => 'Consultation request deleted successfully.',
+                'message' => 'Pengajuan konsultasi berhasil dihapus.',
             ]);
         }
 

@@ -11,24 +11,37 @@ class HomeController extends Controller
 {
     public function index(Request $request): View
     {
-        $contents = EducationalContent::query()
+        $videos = EducationalContent::query()
+            ->where('type', EducationalContent::TYPE_VIDEO)
             ->latest()
             ->get()
             ->map(function (EducationalContent $content): EducationalContent {
-                if ($content->type === EducationalContent::TYPE_VIDEO) {
-                    $content->embed_url = $this->buildYoutubeEmbedUrl($content->source_url);
-                }
+                $content->embed_url = $this->buildYoutubeEmbedUrl($content->source_url);
 
                 return $content;
             });
 
-        $grouped = $contents->groupBy('type');
+        $photoPage = (int) $request->query('photo_page', 1);
+        $photos = EducationalContent::query()
+            ->where('type', EducationalContent::TYPE_PHOTO)
+            ->latest()
+            ->paginate(9, ['*'], 'photo_page', $photoPage);
+
+        $narratives = EducationalContent::query()
+            ->where('type', EducationalContent::TYPE_NARRATIVE)
+            ->latest()
+            ->get();
+
+        $materials = EducationalContent::query()
+            ->where('type', EducationalContent::TYPE_MATERIAL)
+            ->latest()
+            ->get();
 
         return view('frontend.home', [
-            'videos' => $grouped->get(EducationalContent::TYPE_VIDEO, collect()),
-            'photos' => $grouped->get(EducationalContent::TYPE_PHOTO, collect()),
-            'narratives' => $grouped->get(EducationalContent::TYPE_NARRATIVE, collect()),
-            'materials' => $grouped->get(EducationalContent::TYPE_MATERIAL, collect()),
+            'videos' => $videos,
+            'photos' => $photos,
+            'narratives' => $narratives,
+            'materials' => $materials,
             'submissionStatus' => $request->session()->get('consultation_status'),
         ]);
     }

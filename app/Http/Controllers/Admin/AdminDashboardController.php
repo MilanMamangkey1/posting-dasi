@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ArchivedConsultationRequest;
 use App\Models\ConsultationRequest;
 use App\Models\EducationalContent;
 use Illuminate\Http\JsonResponse;
@@ -24,6 +25,8 @@ class AdminDashboardController extends Controller
             'metrics' => $dashboard['metrics'],
             'recentContents' => $dashboard['recent_contents'],
             'recentConsultations' => $dashboard['recent_consultations'],
+            'contentTypeLabels' => EducationalContent::TYPE_LABELS,
+            'consultationStatusLabels' => ConsultationRequest::STATUS_LABELS,
             'statusMessage' => session('admin_status'),
             'statusError' => session('admin_error'),
         ]);
@@ -48,6 +51,7 @@ class AdminDashboardController extends Controller
             'contents' => $contentsQuery->paginate(10)->withQueryString(),
             'contentFilters' => $contentFilters,
             'contentTypes' => EducationalContent::TYPES,
+            'contentTypeLabels' => EducationalContent::TYPE_LABELS,
             'statusMessage' => session('admin_status'),
             'statusError' => session('admin_error'),
         ]);
@@ -76,8 +80,32 @@ class AdminDashboardController extends Controller
             'consultations' => $consultationsQuery->paginate(10)->withQueryString(),
             'consultationFilters' => $consultationFilters,
             'consultationStatuses' => ConsultationRequest::STATUSES,
+            'consultationStatusLabels' => ConsultationRequest::STATUS_LABELS,
             'statusMessage' => session('admin_status'),
             'statusError' => session('admin_error'),
+        ]);
+    }
+
+    public function consultationArchives(Request $request): View
+    {
+        $filters = [
+            'search' => $request->query('archive_search'),
+        ];
+
+        $archivesQuery = ArchivedConsultationRequest::query()->latest('archived_at');
+
+        if ($filters['search']) {
+            $search = $filters['search'];
+            $archivesQuery->where(function ($inner) use ($search): void {
+                $inner->where('full_name', 'like', '%' . $search . '%')
+                    ->orWhere('whatsapp_number', 'like', '%' . $search . '%');
+            });
+        }
+
+        return view('admin.consultations-archive', [
+            'archives' => $archivesQuery->paginate(10)->withQueryString(),
+            'filters' => $filters,
+            'consultationStatusLabels' => ConsultationRequest::STATUS_LABELS,
         ]);
     }
 
@@ -111,7 +139,7 @@ class AdminDashboardController extends Controller
             'recent_contents' => EducationalContent::query()
                 ->latest()
                 ->take(5)
-                ->get(['id', 'title', 'type', 'updated_at']),
+                ->get(['id', 'title', 'type', 'file_path', 'file_size_bytes', 'updated_at']),
             'recent_consultations' => ConsultationRequest::query()
                 ->latest()
                 ->take(5)

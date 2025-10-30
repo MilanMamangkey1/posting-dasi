@@ -27,8 +27,21 @@ class StoreConsultationRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         if ($this->has('whatsapp_number')) {
+            $rawNumber = (string) $this->input('whatsapp_number');
+            $normalizedNumber = preg_replace('/\D+/', '', $rawNumber) ?? '';
+
+            if ($normalizedNumber !== '') {
+                if (str_starts_with($normalizedNumber, '00')) {
+                    $normalizedNumber = substr($normalizedNumber, 2);
+                } elseif (str_starts_with($normalizedNumber, '0')) {
+                    $normalizedNumber = '62' . ltrim($normalizedNumber, '0');
+                }
+
+                $normalizedNumber = '+' . ltrim($normalizedNumber, '+');
+            }
+
             $this->merge([
-                'whatsapp_number' => preg_replace('/\s+/', '', (string) $this->input('whatsapp_number')),
+                'whatsapp_number' => $normalizedNumber,
             ]);
         }
     }
