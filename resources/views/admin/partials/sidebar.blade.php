@@ -1,66 +1,175 @@
 @php
     $activeLink = $active ?? 'dashboard';
     $navLinks = [
-        ['key' => 'dashboard', 'label' => 'Ringkasan', 'href' => route('admin.dashboard.ui')],
-        ['key' => 'contents', 'label' => 'Konten Edukasi', 'href' => route('admin.contents.index')],
-        ['key' => 'consultations', 'label' => 'Pengajuan Konsultasi', 'href' => route('admin.consultations.index')],
-        ['key' => 'consultations_archive', 'label' => 'Arsip Konsultasi', 'href' => route('admin.consultations.archive')],
+        ['key' => 'dashboard', 'label' => 'Dashboard', 'href' => route('admin.dashboard.ui'), 'icon' => '📊'],
+        ['key' => 'contents', 'label' => 'Konten Edukasi', 'href' => route('admin.contents.index'), 'icon' => '📚'],
+        ['key' => 'consultations', 'label' => 'Pengajuan Konsultasi', 'href' => route('admin.consultations.index'), 'icon' => '💬'],
     ];
 @endphp
 
-<aside class="w-full rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:w-64">
-    <p class="text-xs font-semibold uppercase tracking-wide text-red-600">Navigasi Admin</p>
-    <nav class="mt-4 flex flex-col gap-2 text-sm font-medium text-slate-700" aria-label="Sections">
-        @foreach ($navLinks as $link)
-            @php($isActive = $activeLink === $link['key'])
-            <a
-                href="{{ $link['href'] }}"
-                @class([
-                    'flex items-center gap-2 rounded-xl border px-4 py-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
-                    'border-red-600 bg-red-600 text-white focus-visible:ring-red-600' => $isActive,
-                    'border-slate-200 text-slate-600 hover:border-slate-300 hover:text-red-600 focus-visible:ring-red-600' => ! $isActive,
-                ])
-            >
-                <span class="inline-flex h-5 w-5 items-center justify-center text-current">
-                    @switch($link['key'])
-                        @case('dashboard')
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-5 w-5">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3l8.25 6v12H3.75V9z" />
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 21V12h4.5v9" />
-                            </svg>
-                            @break
-                        @case('contents')
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-5 w-5">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.5 6h15M7.5 10.5h9m-9 4.5h6M6 3h12a1.5 1.5 0 011.5 1.5v15A1.5 1.5 0 0118 21H6a1.5 1.5 0 01-1.5-1.5v-15A1.5 1.5 0 016 3z" />
-                            </svg>
-                            @break
-                        @case('consultations')
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-5 w-5">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7.5 8.25h9m-9 3h6M2.25 12a8.25 8.25 0 1115.573 4.032l1.32 3.3a.75.75 0 01-.966.966l-3.3-1.32A8.25 8.25 0 012.25 12z" />
-                            </svg>
-                            @break
-                        @case('consultations_archive')
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-5 w-5">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.5 6.75h15M6 9h12l-.75 10.125a1.5 1.5 0 01-1.494 1.375H8.244a1.5 1.5 0 01-1.494-1.375L6 9zM9.75 9V6a2.25 2.25 0 012.25-2.25A2.25 2.25 0 0114.25 6v3" />
-                            </svg>
-                            @break
-                        @default
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-5 w-5">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v12m6-6H6" />
-                            </svg>
-                    @endswitch
-                </span>
-                <span>{{ $link['label'] }}</span>
-            </a>
-        @endforeach
-    </nav>
+<style>
+    .sidebar-container {
+        background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid #fed7d7;
+        overflow: hidden;
+    }
+    
+    .sidebar-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #fed7d7;
+        background: linear-gradient(135deg, #fef2f2 0%, #fed7d7 100%);
+    }
+    
+    .sidebar-title {
+        color: #c53030;
+        font-weight: 700;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .sidebar-title::before {
+        content: "🎀";
+        font-size: 1.2rem;
+    }
+    
+    .nav-section {
+        padding: 1rem 1.5rem;
+    }
+    
+    .nav-label {
+        color: #718096;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .nav-label::before {
+        content: "";
+        display: block;
+        width: 4px;
+        height: 12px;
+        background-color: #c53030;
+        border-radius: 2px;
+    }
+    
+    .nav-links {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        font-weight: 500;
+        border: 1px solid transparent;
+    }
+    
+    .nav-link:hover {
+        background-color: #fed7d7;
+        transform: translateX(4px);
+    }
+    
+    .nav-link.active {
+        background-color: #c53030;
+        color: white;
+        box-shadow: 0 4px 12px rgba(197, 48, 48, 0.3);
+        border-color: #9b2c2c;
+    }
+    
+    .nav-link.active .nav-icon {
+        transform: scale(1.1);
+    }
+    
+    .nav-icon {
+        font-size: 1.1rem;
+        transition: transform 0.2s ease;
+    }
+    
+    .action-section {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #fed7d7;
+        background-color: #fef2f2;
+    }
+    
+    .logout-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0.75rem 1.5rem;
+        background: linear-gradient(135deg, #c53030 0%, #9b2c2c 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(197, 48, 48, 0.2);
+    }
+    
+    .logout-button:hover {
+        background: linear-gradient(135deg, #b91c1c 0%, #7c1c1c 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(197, 48, 48, 0.3);
+    }
+    
+    .logout-button::before {
+        content: "🚪";
+        font-size: 1rem;
+    }
+    
+    .user-info {
+        font-size: 0.8rem;
+        opacity: 0.9;
+    }
+</style>
 
-    <div class="mt-6 border-t border-slate-200 pt-6">
-        <p class="text-xs font-semibold uppercase tracking-wide text-red-600">Aksi</p>
-        <form method="POST" action="{{ route('logout') }}" class="mt-4">
+<aside class="sidebar-container w-full lg:w-64">
+    <div class="sidebar-header">
+        <div class="sidebar-title">Posting Dasi Admin</div>
+    </div>
+    
+    <div class="nav-section">
+        <div class="nav-label">Navigasi Utama</div>
+        <nav class="nav-links" aria-label="Sections">
+            @foreach ($navLinks as $link)
+                @php($isActive = $activeLink === $link['key'])
+                <a
+                    href="{{ $link['href'] }}"
+                    class="nav-link {{ $isActive ? 'active' : '' }}"
+                >
+                    <span class="nav-icon">{{ $link['icon'] }}</span>
+                    <span>{{ $link['label'] }}</span>
+                </a>
+            @endforeach
+        </nav>
+    </div>
+
+    <div class="action-section">
+        <div class="nav-label">Akun</div>
+        <form method="POST" action="{{ route('logout') }}" class="mt-2">
             @csrf
-            <button type="submit" class="secondary-button w-full justify-center">
-                Keluar {{ auth()->user()?->name ? '('.auth()->user()->name.')' : '' }}
+            <button type="submit" class="logout-button">
+                Keluar 
+                @if(auth()->user()?->name)
+                    <span class="user-info">({{ auth()->user()->name }})</span>
+                @endif
             </button>
         </form>
     </div>

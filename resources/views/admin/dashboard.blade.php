@@ -3,20 +3,588 @@
 @section('title', 'Admin Dashboard')
 
 @section('body')
-    <header class="bg-white border-b border-slate-200">
-        <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-5">
-            <div>
-                <h1 class="flex items-center gap-3 text-2xl font-semibold text-slate-900">
-                    <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-red-600 bg-white text-red-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-5 w-5">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.5 3h5.25v5.25H4.5V3zm9.75 0H19.5v5.25h-5.25V3zm0 9.75H19.5V18h-5.25v-5.25zM4.5 12.75H9.75V18H4.5v-5.25z" />
-                        </svg>
-                    </span>
-                    Website Posting Dasi &mdash; Area Admin
-                </h1>
-                <p class="text-sm text-slate-600">
-                    Dashboard sederhana tanpa ketergantungan JavaScript berlebih.
-                </p>
+    <style>
+        :root {
+            --primary-red: #DC2626;
+            --primary-red-dark: #B91C1C;
+            --primary-red-light: #EF4444;
+            --accent-red: #FEE2E2;
+            --accent-red-dark: #FECACA;
+            --neutral-50: #F9FAFB;
+            --neutral-100: #F3F4F6;
+            --neutral-200: #E5E7EB;
+            --neutral-300: #D1D5DB;
+            --neutral-600: #4B5563;
+            --neutral-700: #374151;
+            --neutral-800: #1F2937;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: var(--neutral-50);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dashboard-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        .dashboard-header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header-title {
+            color: white;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0;
+        }
+        
+        .header-logo {
+            width: 3.5rem;
+            height: 3.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .header-text h1 {
+            font-size: 1.75rem;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        
+        .header-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
+            font-weight: 400;
+        }
+        
+        .status-success {
+            background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+            border-left: 4px solid #10B981;
+            color: #065F46;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .status-success::before {
+            content: '✓';
+            width: 2rem;
+            height: 2rem;
+            background: #10B981;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .status-error {
+            background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+            border-left: 4px solid var(--primary-red);
+            color: var(--primary-red-dark);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .status-error::before {
+            content: '✕';
+            width: 2rem;
+            height: 2rem;
+            background: var(--primary-red);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .section-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .section-title {
+            color: var(--neutral-800);
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        
+        .section-subtitle {
+            color: var(--neutral-600);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            margin-top: 0.25rem;
+        }
+        
+        .last-updated {
+            background: white;
+            color: var(--primary-red);
+            padding: 0.625rem 1.25rem;
+            border-radius: 24px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--neutral-200);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .last-updated-icon {
+            animation: rotate 2s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .metric-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--neutral-200);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-red) 0%, var(--primary-red-light) 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--accent-red-dark);
+        }
+        
+        .metric-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .metric-card__body {
+            margin-bottom: 1rem;
+        }
+        
+        .metric-card dt {
+            color: var(--neutral-600);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .metric-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            background: var(--accent-red);
+            color: var(--primary-red);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+        
+        .metric-card dd {
+            color: var(--primary-red);
+            font-size: 2.25rem;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+        
+        .metric-card__hint {
+            color: var(--neutral-600);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--neutral-200);
+            padding-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .metric-card__hint::before {
+            content: 'ℹ️';
+            font-size: 0.875rem;
+        }
+        
+        .type-badge {
+            background: linear-gradient(135deg, var(--accent-red) 0%, var(--accent-red-dark) 100%);
+            color: var(--primary-red);
+            padding: 0.375rem 0.875rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            border: 1px solid var(--accent-red-dark);
+            letter-spacing: 0.03em;
+        }
+        
+        .status-badge {
+            background: linear-gradient(135deg, var(--accent-red) 0%, var(--accent-red-dark) 100%);
+            color: var(--primary-red);
+            padding: 0.375rem 0.875rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            border: 1px solid var(--accent-red-dark);
+            letter-spacing: 0.03em;
+        }
+        
+        .panel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+        
+        .panel {
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--neutral-200);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .panel:hover {
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .panel__header {
+            background: linear-gradient(135deg, var(--neutral-50) 0%, white 100%);
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--neutral-200);
+        }
+        
+        .panel__header h3 {
+            color: var(--neutral-800);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 0;
+            font-size: 1.125rem;
+        }
+        
+        .panel-icon {
+            width: 2rem;
+            height: 2rem;
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .activity-list {
+            padding: 1.5rem;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .activity-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .activity-list::-webkit-scrollbar-track {
+            background: var(--neutral-100);
+        }
+        
+        .activity-list::-webkit-scrollbar-thumb {
+            background: var(--primary-red);
+            border-radius: 3px;
+        }
+        
+        .activity-item {
+            background: var(--neutral-50);
+            border: 1px solid var(--neutral-200);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        
+        .activity-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--primary-red);
+            border-radius: 12px 0 0 12px;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .activity-item:hover {
+            border-color: var(--accent-red-dark);
+            background: white;
+            transform: translateX(8px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .activity-item:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .activity-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .activity-title {
+            color: var(--neutral-800);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+        
+        .activity-meta {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.625rem;
+            margin-bottom: 0.875rem;
+        }
+        
+        .activity-time {
+            color: var(--neutral-600);
+            font-size: 0.8125rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+        
+        .preview-image {
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--neutral-200);
+            margin-top: 1rem;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .preview-image img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .preview-image:hover img {
+            transform: scale(1.08);
+        }
+        
+        .download-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.625rem;
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+            color: white;
+            padding: 0.625rem 1.25rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-decoration: none;
+            margin-top: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .download-link:hover {
+            background: linear-gradient(135deg, var(--primary-red-dark) 0%, #991B1B 100%);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .accent-link {
+            color: var(--primary-red);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 0.9375rem;
+        }
+        
+        .accent-link:hover {
+            color: var(--primary-red-dark);
+            gap: 0.75rem;
+        }
+        
+        .accent-link span {
+            transition: transform 0.3s ease;
+        }
+        
+        .accent-link:hover span {
+            transform: translateX(4px);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--neutral-600);
+            font-weight: 500;
+        }
+        
+        .empty-state::before {
+            content: '📋';
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        @media (max-width: 768px) {
+            .header-logo {
+                width: 3rem;
+                height: 3rem;
+                font-size: 1.5rem;
+            }
+            
+            .header-text h1 {
+                font-size: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 1.25rem;
+            }
+            
+            .metric-card dd {
+                font-size: 1.875rem;
+            }
+            
+            .panel-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <header class="dashboard-header">
+        <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-6 header-content">
+            <div class="header-title">
+                <div class="header-logo">🎀</div>
+                <div class="header-text">
+                    <h1>Posting Dasi</h1>
+                    <p class="header-subtitle">
+                        Dashboard Admin — Kelola konten dan konsultasi dengan mudah
+                    </p>
+                </div>
             </div>
         </div>
     </header>
@@ -26,13 +594,13 @@
 
         <main class="flex-1 space-y-12">
             @if ($statusMessage)
-                <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                <div class="status-success">
                     {{ $statusMessage }}
                 </div>
             @endif
 
             @if ($statusError)
-                <div class="rounded-lg border border-red-600 bg-white px-4 py-3 text-sm text-red-600">
+                <div class="status-error">
                     {{ $statusError }}
                 </div>
             @endif
@@ -40,111 +608,92 @@
             <section id="metrics" class="space-y-6">
                 <div class="flex flex-wrap items-center justify-between gap-4">
                     <div>
-                        <h2 class="flex items-center gap-2 text-xl font-semibold text-slate-900">
-                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full border border-red-600 bg-white text-red-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-4 w-4">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 19.5h18M7.5 15V9.75M12 15V6M16.5 15V12" />
-                                </svg>
-                            </span>
-                            Ringkasan Data
-                        </h2>
-                        <p class="text-sm text-slate-600">Pantau metrik inti Posting Dasi.</p>
+                        <div class="section-header">
+                            <div class="section-icon">📊</div>
+                            <h2 class="section-title">Ringkasan Data</h2>
+                        </div>
+                        <p class="section-subtitle">Pantau metrik inti Posting Dasi secara real-time</p>
                     </div>
-                    <div class="text-xs uppercase text-red-600">
+                    <div class="last-updated">
+                        <span class="last-updated-icon">🔄</span>
                         Terakhir diperbarui {{ now()->translatedFormat('d M Y, H:i') }}
                     </div>
                 </div>
-                <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                
+                <div class="metric-grid">
                     <article class="metric-card">
                         <div class="metric-card__body">
-                            <dt>Total Konten</dt>
+                            <dt><span class="metric-icon">📚</span> Total Konten</dt>
                             <dd>{{ $metrics['total_contents'] }}</dd>
                         </div>
-                        <p class="metric-card__hint">Akumulasi konten edukasi terdaftar.</p>
+                        <p class="metric-card__hint">Akumulasi konten edukasi terdaftar</p>
                     </article>
+                    
                     <article class="metric-card">
                         <div class="metric-card__body">
-                            <dt>Total Konsultasi</dt>
+                            <dt><span class="metric-icon">💬</span> Total Konsultasi</dt>
                             <dd>{{ $metrics['total_consultations'] }}</dd>
                         </div>
-                        <p class="metric-card__hint">Jumlah permintaan konsultasi yang masuk.</p>
+                        <p class="metric-card__hint">Jumlah permintaan konsultasi yang masuk</p>
                     </article>
-                    <article class="metric-card sm:col-span-2">
+                    
+                    <article class="metric-card">
                         <div class="metric-card__body">
-                            <dt>Konten per Jenis</dt>
-                            <dd class="text-base font-semibold text-slate-900">
+                            <dt><span class="metric-icon">📦</span> Konten per Jenis</dt>
+                            <dd>
                                 @foreach ($metrics['contents_by_type'] as $type => $total)
-                                    <span class="mr-3 uppercase text-xs text-red-600">{{ $contentTypeLabels[$type] ?? ucfirst($type) }}</span>
-                                    <span class="mr-4 text-sm text-slate-900">{{ $total }}</span>
+                                    <span class="type-badge">{{ $contentTypeLabels[$type] ?? ucfirst($type) }}: {{ $total }}</span>
                                 @endforeach
                             </dd>
                         </div>
-                        <p class="metric-card__hint">Distribusi video, foto, narasi, dan materi.</p>
+                        <p class="metric-card__hint">Distribusi video, foto, narasi, dan materi</p>
                     </article>
-                    <article class="metric-card sm:col-span-2 lg:col-span-4">
+                    
+                    <article class="metric-card">
                         <div class="metric-card__body">
-                            <dt>Status Konsultasi</dt>
-                            <dd class="text-base font-semibold text-slate-900">
+                            <dt><span class="metric-icon">📋</span> Status Konsultasi</dt>
+                            <dd>
                                 @foreach ($metrics['consultations_by_status'] as $status => $total)
-                                    <span class="mr-3 uppercase text-xs text-red-600">{{ $consultationStatusLabels[$status] ?? str_replace('_', ' ', $status) }}</span>
-                                    <span class="mr-4 text-sm text-slate-900">{{ $total }}</span>
+                                    <span class="status-badge">{{ $consultationStatusLabels[$status] ?? str_replace('_', ' ', $status) }}: {{ $total }}</span>
                                 @endforeach
                             </dd>
                         </div>
-                        <p class="metric-card__hint">Gunakan untuk memantau antrian layanan.</p>
+                        <p class="metric-card__hint">Gunakan untuk memantau antrian layanan</p>
                     </article>
                 </div>
             </section>
 
             <section class="space-y-6">
-                <h2 class="flex items-center gap-2 text-xl font-semibold text-slate-900">
-                    <span class="inline-flex h-7 w-7 items-center justify-center rounded-full border border-red-600 bg-white text-red-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-4 w-4">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6l3 1.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </span>
-                    Aktivitas Terbaru
-                </h2>
-                <div class="grid gap-6 lg:grid-cols-2">
+                <div class="section-header">
+                    <div class="section-icon">⏰</div>
+                    <h2 class="section-title">Aktivitas Terbaru</h2>
+                </div>
+                <p class="section-subtitle">Konten dan konsultasi yang baru saja diperbarui</p>
+                
+                <div class="panel-grid">
                     <section class="panel">
                         <header class="panel__header">
-                            <h3 class="flex items-center gap-2">
-                                <span class="inline-flex h-6 w-6 items-center justify-center rounded-full border border-red-600 bg-white text-red-600">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-4 w-4">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 4.5h9.75a1.5 1.5 0 011.5 1.5V21l-6-3-6 3V6a1.5 1.5 0 011.5-1.5z" />
-                                    </svg>
-                                </span>
+                            <h3>
+                                <div class="panel-icon">📚</div>
                                 Konten Terbaru
                             </h3>
                         </header>
-                        <ul class="space-y-3 text-sm text-slate-700">
+                        <div class="activity-list">
                             @forelse ($recentContents as $content)
-                                <li class="rounded-lg border border-slate-200 px-3 py-2">
-                                    <span class="font-semibold text-slate-900">{{ $content->title }}</span>
-                                    <span class="ml-2 uppercase text-xs text-red-600">({{ $contentTypeLabels[$content->type] ?? ucfirst($content->type) }})</span>
-                                    <span class="ml-3 text-xs text-slate-500">Diperbarui {{ $content->updated_at->diffForHumans() }}</span>
+                                <div class="activity-item">
+                                    <div class="activity-title">{{ $content->title }}</div>
+                                    <div class="activity-meta">
+                                        <span class="type-badge">{{ $contentTypeLabels[$content->type] ?? ucfirst($content->type) }}</span>
+                                        <span class="activity-time">🕒 {{ $content->updated_at->diffForHumans() }}</span>
+                                    </div>
+                                    
                                     @if ($content->photo_url)
-                                        <a
-                                            href="{{ $content->photo_url }}"
-                                            target="_blank"
-                                            rel="noopener"
-                                        class="mt-3 block overflow-hidden rounded-md border border-slate-200 bg-white"
-                                        >
-                                            <img
-                                                src="{{ $content->photo_url }}"
-                                                alt="Pratinjau foto {{ $content->title }}"
-                                                class="h-32 w-full object-cover transition duration-200 hover:scale-[1.02]"
-                                                loading="lazy"
-                                            >
+                                        <a href="{{ $content->photo_url }}" target="_blank" rel="noopener" class="preview-image">
+                                            <img src="{{ $content->photo_url }}" alt="Pratinjau foto {{ $content->title }}" loading="lazy">
                                         </a>
                                     @elseif ($content->document_url)
-                                        <a
-                                            href="{{ $content->document_url }}"
-                                            target="_blank"
-                                            rel="noopener"
-                                        class="mt-3 inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-red-600 hover:text-red-600"
-                                        >
-                                            <span>Unduh {{ strtoupper($content->document_extension ?? 'Berkas') }}</span>
+                                        <a href="{{ $content->document_url }}" target="_blank" rel="noopener" class="download-link">
+                                            📥 Unduh {{ strtoupper($content->document_extension ?? 'Berkas') }}
                                             @if ($content->document_size_bytes)
                                                 @php
                                                     $recentDocBytes = $content->document_size_bytes;
@@ -160,43 +709,46 @@
                                                     $recentFormatted = rtrim(rtrim($recentFormatted, '0'), '.');
                                                     $recentDocLabel = $recentFormatted . ' ' . $recentUnits[$recentIndex];
                                                 @endphp
-                                                <span class="text-red-600">({{ $recentDocLabel }})</span>
+                                                <span>({{ $recentDocLabel }})</span>
                                             @endif
                                         </a>
                                     @endif
-                                </li>
+                                </div>
                             @empty
-                                <li class="text-red-600">Belum ada konten.</li>
+                                <div class="empty-state">Belum ada konten</div>
                             @endforelse
-                        </ul>
-                        <div class="mt-4 text-right">
-                            <a href="{{ route('admin.contents.index') }}" class="accent-link">Kelola Konten &rarr;</a>
+                        </div>
+                        <div class="panel__header">
+                            <a href="{{ route('admin.contents.index') }}" class="accent-link">
+                                Kelola Konten <span>→</span>
+                            </a>
                         </div>
                     </section>
+                    
                     <section class="panel">
                         <header class="panel__header">
-                            <h3 class="flex items-center gap-2">
-                                <span class="inline-flex h-6 w-6 items-center justify-center rounded-full border border-red-600 bg-white text-red-600">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-4 w-4">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.25 9h7.5m-7.5 3h4.5m-10.5 0a8.25 8.25 0 0114.768-4.5A7.5 7.5 0 0122.5 15.75c0 1.268-.309 2.463-.855 3.513a.75.75 0 01-.984.351l-3.09-1.375a2.25 2.25 0 00-1.876.042 7.46 7.46 0 01-3.195.719 7.5 7.5 0 01-7.5-7.5z" />
-                                    </svg>
-                                </span>
+                            <h3>
+                                <div class="panel-icon">💬</div>
                                 Konsultasi Terbaru
                             </h3>
                         </header>
-                        <ul class="space-y-3 text-sm text-slate-700">
+                        <div class="activity-list">
                             @forelse ($recentConsultations as $consultation)
-                                <li class="rounded-lg border border-slate-200 px-3 py-2">
-                                    <span class="font-semibold text-slate-900">{{ $consultation->full_name }}</span>
-                                    <span class="ml-2 uppercase text-xs text-red-600">({{ $consultationStatusLabels[$consultation->status] ?? str_replace('_', ' ', $consultation->status) }})</span>
-                                    <span class="ml-3 text-xs text-slate-500">Diperbarui {{ $consultation->updated_at->diffForHumans() }}</span>
-                                </li>
+                                <div class="activity-item">
+                                    <div class="activity-title">{{ $consultation->full_name }}</div>
+                                    <div class="activity-meta">
+                                        <span class="status-badge">{{ $consultationStatusLabels[$consultation->status] ?? str_replace('_', ' ', $consultation->status) }}</span>
+                                        <span class="activity-time">🕒 {{ $consultation->updated_at->diffForHumans() }}</span>
+                                    </div>
+                                </div>
                             @empty
-                                <li class="text-red-600">Belum ada pengajuan.</li>
+                                <div class="empty-state">Belum ada pengajuan</div>
                             @endforelse
-                        </ul>
-                        <div class="mt-4 text-right">
-                            <a href="{{ route('admin.consultations.index') }}" class="accent-link">Kelola Konsultasi &rarr;</a>
+                        </div>
+                        <div class="panel__header">
+                            <a href="{{ route('admin.consultations.index') }}" class="accent-link">
+                                Kelola Konsultasi <span>→</span>
+                            </a>
                         </div>
                     </section>
                 </div>
