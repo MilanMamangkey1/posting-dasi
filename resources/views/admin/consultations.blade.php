@@ -205,7 +205,7 @@
                                                                 </div>
                                                                 <div>
                                                                     <label for="admin_notes-{{ $consultation->id }}" class="mb-1 block text-xs font-semibold uppercase text-slate-500">Catatan admin</label>
-                                                                    <textarea id="admin_notes-{{ $consultation->id }}" name="admin_notes" rows="2" class="form-input" placeholder="Catatan admin (opsional)">{{ $consultation->admin_notes }}</textarea>
+                                                                    <textarea id="admin_notes-{{ $consultation->id }}" name="admin_notes" rows="2" class="form-input" placeholder="Catatan admin (opsional)" data-auto-resize>{{ $consultation->admin_notes }}</textarea>
                                                                 </div>
                                                                 <div class="flex justify-end">
                                                                     <button type="submit" class="primary-button">Simpan perubahan</button>
@@ -262,4 +262,25 @@
             </section>
         </main>
     </div>
+
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var autoResizeTargets = document.querySelectorAll('[data-auto-resize]');
+                if (!autoResizeTargets.length) {
+                    return;
+                }
+
+                autoResizeTargets.forEach(function (textarea) {
+                    var resize = function () {
+                        textarea.style.height = 'auto';
+                        textarea.style.height = textarea.scrollHeight + 'px';
+                    };
+
+                    textarea.addEventListener('input', resize);
+                    resize();
+                });
+            });
+        </script>
+    @endpush
 @endsection

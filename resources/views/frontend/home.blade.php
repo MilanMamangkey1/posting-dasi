@@ -360,6 +360,7 @@
                                         required
                                         placeholder="Tuliskan alamat lengkap beserta kelurahan/kecamatan"
                                         class="form-input pl-12"
+                                        data-auto-resize
                                     >{{ old('address') }}</textarea>
                                 </div>
                                 @error('address')
@@ -382,6 +383,7 @@
                                         required
                                         placeholder="Sampaikan keluhan atau kebutuhan konsultasi Anda secara ringkas namun jelas"
                                         class="form-input pl-12"
+                                        data-auto-resize
                                     >{{ old('issue_description') }}</textarea>
                                 </div>
                                 @error('issue_description')
@@ -486,6 +488,25 @@
         @if (config('services.recaptcha.key'))
             <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         @endif
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var autoResizeTargets = document.querySelectorAll('[data-auto-resize]');
+                if (!autoResizeTargets.length) {
+                    return;
+                }
+
+                autoResizeTargets.forEach(function (textarea) {
+                    var resize = function () {
+                        textarea.style.height = 'auto';
+                        textarea.style.height = textarea.scrollHeight + 'px';
+                    };
+
+                    textarea.addEventListener('input', resize);
+                    resize();
+                });
+            });
+        </script>
     @endpush
 
     <script>
