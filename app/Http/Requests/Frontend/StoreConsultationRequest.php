@@ -17,13 +17,22 @@ class StoreConsultationRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $recaptchaKey = config('services.recaptcha.key');
+        $recaptchaSecret = config('services.recaptcha.secret');
+        $recaptchaEnabled = ! empty($recaptchaKey) && ! empty($recaptchaSecret);
+
+        $rules = [
             'full_name' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:500'],
             'issue_description' => ['required', 'string'],
             'whatsapp_number' => ['required', 'string', 'regex:/^\+?[1-9]\d{7,14}$/'],
-            'g-recaptcha-response' => ['required', 'string', new Recaptcha()],
         ];
+
+        $rules['g-recaptcha-response'] = $recaptchaEnabled
+            ? ['required', 'string', new Recaptcha()]
+            : ['nullable', 'string'];
+
+        return $rules;
     }
 
     protected function prepareForValidation(): void

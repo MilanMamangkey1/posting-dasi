@@ -112,87 +112,147 @@
                             Antrian Konsultasi
                         </h3>
                     </header>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full text-left text-sm text-slate-700">
-                            <thead class="border-b border-slate-200 text-xs font-semibold uppercase text-red-600">
-                                <tr>
-                                    <th class="px-4 py-3">Pemohon</th>
-                                    <th class="px-4 py-3">Status</th>
-                                    <th class="px-4 py-3">Kontak</th>
-                                    <th class="px-4 py-3">Alamat</th>
-                                    <th class="px-4 py-3 text-right">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-200">
-                                @forelse ($consultations as $consultation)
-                                    @php
-                                        $sanitizedWhatsapp = preg_replace('/[^0-9]/', '', $consultation->whatsapp_number ?? '');
-                                        $issueSummary = trim(preg_replace('/\s+/', ' ', $consultation->issue_description ?? ''));
-                                        $issueSegment = $issueSummary !== '' ? "({$issueSummary})" : '';
-                                        $greeting = "Halo, {$consultation->full_name} kami dari DInas PPKBD Kota Tomohon akan memberikan konsultasi terkait dengan keluhan anda";
-                                        if ($issueSegment !== '') {
-                                            $greeting .= " {$issueSegment}";
-                                        }
-                                        $whatsappMessage = $greeting . "\n\n";
-                                        $whatsappMessage .= "Berikut Dibawah ini adalah jawaban dari keluhan anda:\n\n";
-                                        $whatsappMessage .= "Jika ada yang ingin ditanyakan lagi jangan sungkan,\n";
-                                        $whatsappMessage .= "Homat Kami DInas PPKBD kota Tomohon";
-                                        $encodedWhatsappMessage = rawurlencode($whatsappMessage);
-                                    @endphp
+                    <div class="overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-slate-200 text-left text-sm text-slate-700">
+                                <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-600">
                                     <tr>
-                                        <td class="px-4 py-3">
-                                            <div class="font-semibold text-slate-900">{{ $consultation->full_name }}</div>
-                                            <details class="mt-1 text-xs text-slate-500">
-                                                <summary class="cursor-pointer font-medium text-red-600 hover:text-red-600">
-                                                    Rincian Permasalahan
-                                                </summary>
-                                                <p class="mt-2 whitespace-pre-line text-sm text-slate-600">{{ $consultation->issue_description }}</p>
-                                                @if ($consultation->admin_notes)
-                                                    <p class="mt-2 text-xs text-slate-500">Catatan Admin: {{ $consultation->admin_notes }}</p>
-                                                @endif
-                                            </details>
-                                        </td>
-                                        <td class="px-4 py-3 text-slate-600">
-                                            <form method="POST" action="{{ route('admin.consultations.update', $consultation) }}" class="space-y-2">
-                                                @csrf
-                                                @method('PUT')
-                                                <select name="status" class="form-input">
-                                                    @foreach ($consultationStatuses as $status)
-                                                    <option value="{{ $status }}" @selected($consultation->status === $status)>{{ $consultationStatusLabels[$status] ?? ucfirst(str_replace('_', ' ', $status)) }}</option>
-                                                    @endforeach
-                                                </select>
-                                                <textarea name="admin_notes" rows="2" class="form-input" placeholder="Catatan admin (opsional)">{{ $consultation->admin_notes }}</textarea>
-                                                <button type="submit" class="primary-button">Simpan Status</button>
-                                            </form>
-                                        </td>
-                                        <td class="px-4 py-3 text-slate-600">
-                                            <div>{{ $consultation->whatsapp_number ?? '-' }}</div>
-                                            @if ($sanitizedWhatsapp)
-                                                <a href="https://wa.me/{{ $sanitizedWhatsapp }}?text={{ $encodedWhatsappMessage }}" target="_blank" rel="noopener" class="accent-link">
-                                                    Hubungi melalui WhatsApp
-                                                </a>
-                                            @endif
-                                        </td>
-                                        <td class="px-4 py-3 text-slate-600">
-                                            {{ $consultation->address }}
-                                        </td>
-                                        <td class="px-4 py-3 text-right text-slate-600">
-                                            <form method="POST" action="{{ route('admin.consultations.destroy', $consultation) }}" onsubmit="return confirm('Hapus pengajuan ini?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="danger-button">Hapus</button>
-                                            </form>
-                                        </td>
+                                        <th class="px-4 py-3">Pemohon &amp; Permasalahan</th>
+                                        <th class="px-4 py-3">Status &amp; Tindak Lanjut</th>
+                                        <th class="px-4 py-3">Kontak &amp; Alamat</th>
+                                        <th class="px-4 py-3 text-right">Aksi</th>
                                     </tr>
-                                @empty
-                                    <tr>
-                                        <td class="px-4 py-4 text-sm text-red-600" colspan="5">
-                                            Belum ada pengajuan konsultasi.
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 bg-white">
+                                    @forelse ($consultations as $consultation)
+                                        @php
+                                            $sanitizedWhatsapp = preg_replace('/[^0-9]/', '', $consultation->whatsapp_number ?? '');
+                                            $issueSummary = trim(preg_replace('/\s+/', ' ', $consultation->issue_description ?? ''));
+                                            $issueSegment = $issueSummary !== '' ? "({$issueSummary})" : '';
+                                            $greeting = "Halo, {$consultation->full_name} kami dari DInas PPKBD Kota Tomohon akan memberikan konsultasi terkait dengan keluhan anda";
+                                            if ($issueSegment !== '') {
+                                                $greeting .= " {$issueSegment}";
+                                            }
+                                            $whatsappMessage = $greeting . "\n\n";
+                                            $whatsappMessage .= "Berikut Dibawah ini adalah jawaban dari keluhan anda:\n\n";
+                                            $whatsappMessage .= "Jika ada yang ingin ditanyakan lagi jangan sungkan,\n";
+                                            $whatsappMessage .= "Homat Kami DInas PPKBD kota Tomohon";
+                                            $encodedWhatsappMessage = rawurlencode($whatsappMessage);
+
+                                            $statusColors = [
+                                                'pending' => 'bg-amber-100 text-amber-700 ring-amber-200',
+                                                'in_progress' => 'bg-sky-100 text-sky-700 ring-sky-200',
+                                                'resolved' => 'bg-emerald-100 text-emerald-700 ring-emerald-200',
+                                                'closed' => 'bg-slate-100 text-slate-700 ring-slate-200',
+                                            ];
+
+                                            $statusBadgeClass = $statusColors[$consultation->status] ?? 'bg-slate-100 text-slate-700 ring-slate-200';
+                                            $statusLabel = $consultationStatusLabels[$consultation->status] ?? ucfirst(str_replace('_', ' ', $consultation->status));
+                                            $submittedAt = $consultation->created_at ? $consultation->created_at->format('d M Y H:i') : null;
+                                            $lastUpdatedAt = $consultation->updated_at ? $consultation->updated_at->format('d M Y H:i') : null;
+                                            $issueBody = (string) ($consultation->issue_description ?? '');
+                                            $issuePreview = \Illuminate\Support\Str::limit($issueBody, 140);
+                                            $isIssueTruncated = \Illuminate\Support\Str::length($issueBody) > \Illuminate\Support\Str::length($issuePreview);
+                                        @endphp
+                                        <tr class="{{ $loop->even ? 'bg-slate-50' : 'bg-white' }}">
+                                            <td class="align-top px-4 py-4">
+                                                <div class="flex flex-col gap-3">
+                                                    <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                                                        <span class="font-semibold text-slate-900">{{ $consultation->full_name }}</span>
+                                                        @if ($submittedAt)
+                                                            <span class="text-xs text-slate-500">Diajukan {{ $submittedAt }}</span>
+                                                        @endif
+                                                    </div>
+                                                    <p class="text-sm leading-relaxed text-slate-600">{{ $issuePreview }}</p>
+                                                    @if ($isIssueTruncated)
+                                                        <details class="text-xs text-slate-500">
+                                                            <summary class="cursor-pointer font-medium text-red-600 hover:text-red-700">Lihat rincian permasalahan</summary>
+                                                            <p class="mt-2 whitespace-pre-line text-sm text-slate-600">{{ $consultation->issue_description }}</p>
+                                                        </details>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                            <td class="align-top px-4 py-4">
+                                                <div class="flex flex-col gap-3">
+                                                    <div class="flex flex-wrap items-center gap-2">
+                                                        <span class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ring-1 ring-inset {{ $statusBadgeClass }}">
+                                                            <span class="inline-block h-2 w-2 rounded-full bg-current"></span>
+                                                            {{ $statusLabel }}
+                                                        </span>
+                                                        @if ($lastUpdatedAt && $lastUpdatedAt !== $submittedAt)
+                                                            <span class="text-xs text-slate-500">Diperbarui {{ $lastUpdatedAt }}</span>
+                                                        @endif
+                                                    </div>
+                                                    @if ($consultation->admin_notes)
+                                                        <p class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs leading-relaxed text-slate-600">
+                                                            <span class="font-semibold text-slate-700">Catatan admin:</span>
+                                                            {{ $consultation->admin_notes }}
+                                                        </p>
+                                                    @endif
+                                                    <details class="group text-sm text-slate-700">
+                                                        <summary class="cursor-pointer font-semibold text-red-600 hover:text-red-700">Ubah status &amp; catatan</summary>
+                                                        <div class="mt-3 space-y-3 rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
+                                                            <form method="POST" action="{{ route('admin.consultations.update', $consultation) }}" class="space-y-3">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <div>
+                                                                    <label for="status-{{ $consultation->id }}" class="mb-1 block text-xs font-semibold uppercase text-slate-500">Status</label>
+                                                                    <select id="status-{{ $consultation->id }}" name="status" class="form-input">
+                                                                        @foreach ($consultationStatuses as $status)
+                                                                            <option value="{{ $status }}" @selected($consultation->status === $status)>{{ $consultationStatusLabels[$status] ?? ucfirst(str_replace('_', ' ', $status)) }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                                <div>
+                                                                    <label for="admin_notes-{{ $consultation->id }}" class="mb-1 block text-xs font-semibold uppercase text-slate-500">Catatan admin</label>
+                                                                    <textarea id="admin_notes-{{ $consultation->id }}" name="admin_notes" rows="2" class="form-input" placeholder="Catatan admin (opsional)">{{ $consultation->admin_notes }}</textarea>
+                                                                </div>
+                                                                <div class="flex justify-end">
+                                                                    <button type="submit" class="primary-button">Simpan perubahan</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </details>
+                                                </div>
+                                            </td>
+                                            <td class="align-top px-4 py-4 text-sm text-slate-600">
+                                                <div class="space-y-2">
+                                                    <div>
+                                                        <span class="text-xs font-semibold uppercase text-slate-500">Nomor WhatsApp</span>
+                                                        <div class="font-medium text-slate-700">{{ $consultation->whatsapp_number ?? '-' }}</div>
+                                                        @if ($sanitizedWhatsapp)
+                                                            <a href="https://wa.me/{{ $sanitizedWhatsapp }}?text={{ $encodedWhatsappMessage }}" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="h-4 w-4">
+                                                                    <path fill-rule="evenodd" d="M12 2.25a9.75 9.75 0 00-8.469 14.84l-1.05 3.817a1.125 1.125 0 001.383 1.383l3.818-1.05A9.75 9.75 0 1012 2.25zm0 2.25a7.5 7.5 0 00-6.514 11.233.75.75 0 01.06.574l-.75 2.729 2.73-.75a.75.75 0 01.573.06A7.5 7.5 0 1012 4.5zm3.018 8.038c-.175-.088-1.03-.508-1.188-.565-.16-.059-.277-.088-.394.087-.118.175-.453.565-.556.682-.102.118-.205.133-.38.044-.175-.088-.738-.272-1.407-.868-.52-.463-.872-1.036-.974-1.211-.102-.175-.01-.27.077-.357.079-.078.175-.205.262-.307.087-.102.116-.175.175-.292.058-.117.029-.219-.015-.307-.044-.087-.394-.949-.54-1.299-.142-.34-.286-.295-.394-.3-.102-.004-.219-.005-.336-.005-.117 0-.307.044-.468.22-.16.175-.61.596-.61 1.456 0 .86.623 1.688.71 1.805.087.117 1.226 1.874 2.974 2.626 1.041.449 1.45.488 1.97.41.317-.047 1.03-.42 1.176-.826.145-.405.145-.751.102-.826-.043-.074-.16-.117-.336-.205z" clip-rule="evenodd" />
+                                                                </svg>
+                                                                Hubungi via WhatsApp
+                                                            </a>
+                                                        @endif
+                                                    </div>
+                                                    <div>
+                                                        <span class="text-xs font-semibold uppercase text-slate-500">Alamat</span>
+                                                        <p class="text-sm leading-relaxed text-slate-600">{{ $consultation->address }}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="align-top px-4 py-4 text-right text-sm text-slate-600">
+                                                <form method="POST" action="{{ route('admin.consultations.destroy', $consultation) }}" onsubmit="return confirm('Hapus pengajuan ini?');" class="inline-flex">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="danger-button">Hapus</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td class="px-4 py-4 text-sm text-red-600" colspan="4">
+                                                Belum ada pengajuan konsultasi.
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     @if ($consultations instanceof \Illuminate\Pagination\LengthAwarePaginator)

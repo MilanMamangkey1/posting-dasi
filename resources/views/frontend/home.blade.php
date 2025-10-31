@@ -420,12 +420,12 @@
                                     @if ($recaptchaKey)
                                         <div class="g-recaptcha" data-sitekey="{{ $recaptchaKey }}"></div>
                                         <p class="text-xs text-slate-500">Centang kotak di atas sebelum mengirimkan pengajuan.</p>
+                                        @error('g-recaptcha-response')
+                                            <p class="text-xs text-red-600">{{ $message }}</p>
+                                        @enderror
                                     @else
-                                        <p class="text-xs text-red-600">captcha di sini.</p>
+                                    <p class="text-xs text-slate-500">recaptcha di sini.</p>
                                     @endif
-                                    @error('g-recaptcha-response')
-                                        <p class="text-xs text-red-600">{{ $message }}</p>
-                                    @enderror
                                 </div>
                                 <button
                                     type="submit"

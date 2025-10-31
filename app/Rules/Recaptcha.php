@@ -18,8 +18,6 @@ class Recaptcha implements ValidationRule
         $secret = config('services.recaptcha.secret');
 
         if (empty($secret)) {
-            $fail(__('Validasi reCAPTCHA belum dikonfigurasi.'));
-
             return;
         }
 
@@ -56,4 +54,3 @@ class Recaptcha implements ValidationRule
         }
     }
 }
-
