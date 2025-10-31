@@ -41,6 +41,8 @@ class ConsultationRequest extends Model
 
     protected $casts = [
         'handled_at' => 'datetime',
+        'address' => 'encrypted',
+        'whatsapp_number' => 'encrypted',
     ];
 
     public static function labelForStatus(string $status): string

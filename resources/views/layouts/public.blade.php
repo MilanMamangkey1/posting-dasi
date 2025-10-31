@@ -11,5 +11,7 @@
         <div class="min-h-screen">
             @yield('body')
         </div>
+        <div class="toast-container" data-toast-root></div>
+        @stack('scripts')
     </body>
 </html>

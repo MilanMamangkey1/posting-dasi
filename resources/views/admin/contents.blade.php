@@ -19,20 +19,36 @@
         </div>
     </header>
 
-    <div class="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-8 lg:flex-row">
+    <div class="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-8 lg:flex-row lg:items-start lg:gap-10">
         @include('admin.partials.sidebar', ['active' => 'contents'])
 
         <main class="flex-1 space-y-12">
             @if ($statusMessage)
-                <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-                    {{ $statusMessage }}
-                </div>
+                @push('scripts')
+                    <script>
+                        const toastSuccessPayload = { type: 'success', message: @json($statusMessage) };
+                        if (typeof window.enqueueToast === 'function') {
+                            window.enqueueToast(toastSuccessPayload);
+                        } else {
+                            window.__toastQueue = window.__toastQueue || [];
+                            window.__toastQueue.push(toastSuccessPayload);
+                        }
+                    </script>
+                @endpush
             @endif
 
             @if ($statusError)
-                <div class="rounded-lg border border-red-600 bg-white px-4 py-3 text-sm text-red-600">
-                    {{ $statusError }}
-                </div>
+                @push('scripts')
+                    <script>
+                        const toastErrorPayload = { type: 'error', message: @json($statusError) };
+                        if (typeof window.enqueueToast === 'function') {
+                            window.enqueueToast(toastErrorPayload);
+                        } else {
+                            window.__toastQueue = window.__toastQueue || [];
+                            window.__toastQueue.push(toastErrorPayload);
+                        }
+                    </script>
+                @endpush
             @endif
 
             @if ($errors->any())
@@ -77,7 +93,7 @@
                     </form>
                 </div>
 
-                <div class="grid gap-6 lg:grid-cols-2">
+                <div class="space-y-6">
                     <section class="panel">
                         <header class="panel__header">
                             <h3 class="flex items-center gap-2">
@@ -109,18 +125,30 @@
                                 <textarea class="form-input" id="summary" name="summary" rows="2">{{ old('summary') }}</textarea>
                             </div>
 
+                            <div class="space-y-1">
+                                <label class="form-label" for="event_date">Tanggal Kegiatan (opsional)</label>
+                                <input
+                                    class="form-input"
+                                    type="date"
+                                    id="event_date"
+                                    name="event_date"
+                                    value="{{ old('event_date') }}"
+                                >
+                                <p class="text-xs text-slate-500">Isi tanggal kegiatan berlangsung atau biarkan kosong bila tidak diperlukan.</p>
+                            </div>
+
                             <div class="space-y-1" data-field-for="video">
                                 <label class="form-label" for="source_url">Tautan Video YouTube</label>
                                 <input class="form-input" type="url" id="source_url" name="source_url" value="{{ old('source_url') }}">
                             </div>
 
                             <div class="space-y-1" data-field-for="photo">
-                                <label class="form-label" for="file">Foto (maksimal 5 MB)</label>
+                                <label class="form-label" for="file">Foto (maksimal 3 MB)</label>
                                 <input class="form-input" type="file" id="file" name="file" accept=".jpg,.jpeg,.png,.gif,.webp">
                             </div>
 
                             <div class="space-y-1" data-field-for="material">
-                                <label class="form-label" for="material_file">Dokumen Materi (PDF, DOCX, PPTX &le; 10 MB)</label>
+                                <label class="form-label" for="material_file">Dokumen Materi (PDF, DOCX, PPTX &le; 3 MB)</label>
                                 <input class="form-input" type="file" id="material_file" name="file" accept=".pdf,.doc,.docx,.ppt,.pptx">
                             </div>
 
@@ -153,6 +181,7 @@
                                         <th class="px-3 py-2">Judul</th>
                                         <th class="px-3 py-2">Jenis</th>
                                         <th class="px-3 py-2">Ringkasan</th>
+                                        <th class="px-3 py-2">Tanggal Upload</th>
                                         <th class="px-3 py-2 text-right">Aksi</th>
                                     </tr>
                                 </thead>
@@ -210,6 +239,12 @@
                                                     </a>
                                                 @endif
                                             </td>
+                                            <td class="px-3 py-3 text-sm text-slate-500 whitespace-nowrap">
+                                                @php
+                                                    $uploadedAt = optional($content->event_date ?? $content->created_at)->format('d/m/Y');
+                                                @endphp
+                                                {{ $uploadedAt ?? '-' }}
+                                            </td>
                                             <td class="px-3 py-3 text-right">
                                                 <details class="inline-block text-left">
                                                     <summary class="cursor-pointer text-xs font-semibold text-red-600 hover:text-red-600">
@@ -233,6 +268,17 @@
                                                             <div class="space-y-1">
                                                                 <label class="form-label text-xs" for="summary_{{ $content->id }}">Ringkasan</label>
                                                                 <textarea class="form-input" id="summary_{{ $content->id }}" name="summary" rows="2">{{ $content->summary }}</textarea>
+                                                            </div>
+
+                                                            <div class="space-y-1">
+                                                                <label class="form-label text-xs" for="event_date_{{ $content->id }}">Tanggal Kegiatan (opsional)</label>
+                                                                <input
+                                                                    class="form-input"
+                                                                    type="date"
+                                                                    id="event_date_{{ $content->id }}"
+                                                                    name="event_date"
+                                                                    value="{{ old('event_date', optional($content->event_date)->format('Y-m-d')) }}"
+                                                                >
                                                             </div>
 
                                                             <div class="space-y-1" data-field-for="video">

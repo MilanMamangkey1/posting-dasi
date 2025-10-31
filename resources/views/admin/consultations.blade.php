@@ -19,20 +19,36 @@
         </div>
     </header>
 
-    <div class="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-8 lg:flex-row">
+    <div class="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-8 lg:flex-row lg:items-start lg:gap-10">
         @include('admin.partials.sidebar', ['active' => 'consultations'])
 
         <main class="flex-1 space-y-12">
             @if ($statusMessage)
-                <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-                    {{ $statusMessage }}
-                </div>
+                @push('scripts')
+                    <script>
+                        const toastSuccessPayload = { type: 'success', message: @json($statusMessage) };
+                        if (typeof window.enqueueToast === 'function') {
+                            window.enqueueToast(toastSuccessPayload);
+                        } else {
+                            window.__toastQueue = window.__toastQueue || [];
+                            window.__toastQueue.push(toastSuccessPayload);
+                        }
+                    </script>
+                @endpush
             @endif
 
             @if ($statusError)
-                <div class="rounded-lg border border-red-600 bg-white px-4 py-3 text-sm text-red-600">
-                    {{ $statusError }}
-                </div>
+                @push('scripts')
+                    <script>
+                        const toastErrorPayload = { type: 'error', message: @json($statusError) };
+                        if (typeof window.enqueueToast === 'function') {
+                            window.enqueueToast(toastErrorPayload);
+                        } else {
+                            window.__toastQueue = window.__toastQueue || [];
+                            window.__toastQueue.push(toastErrorPayload);
+                        }
+                    </script>
+                @endpush
             @endif
 
             @if ($errors->any())
@@ -57,7 +73,7 @@
                             </span>
                             Daftar Pengajuan Konsultasi
                         </h2>
-                        <p class="text-sm text-slate-600">Saring berdasarkan status atau cari nama/nomor WhatsApp.</p>
+                        <p class="text-sm text-slate-600">Saring berdasarkan status, rentang waktu, atau cari nama/nomor WhatsApp.</p>
                     </div>
                     <form method="GET" action="{{ route('admin.consultations.index') }}" class="flex flex-wrap items-end gap-3 text-sm text-slate-700">
                         <div class="flex flex-col">
@@ -66,6 +82,14 @@
                                 <option value="">Semua status</option>
                                 @foreach ($consultationStatuses as $status)
                                     <option value="{{ $status }}" @selected($consultationFilters['status'] === $status)>{{ $consultationStatusLabels[$status] ?? ucfirst(str_replace('_', ' ', $status)) }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="consultation_range" class="text-xs uppercase text-red-600">Rentang Waktu</label>
+                            <select id="consultation_range" name="consultation_range" class="form-input w-48">
+                                @foreach ($consultationDateRanges as $value => $label)
+                                    <option value="{{ $value }}" @selected($consultationFilters['date_range'] === $value)>{{ $label }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -101,7 +125,20 @@
                             </thead>
                             <tbody class="divide-y divide-slate-200">
                                 @forelse ($consultations as $consultation)
-                                    @php($sanitizedWhatsapp = preg_replace('/[^0-9]/', '', $consultation->whatsapp_number ?? ''))
+                                    @php
+                                        $sanitizedWhatsapp = preg_replace('/[^0-9]/', '', $consultation->whatsapp_number ?? '');
+                                        $issueSummary = trim(preg_replace('/\s+/', ' ', $consultation->issue_description ?? ''));
+                                        $issueSegment = $issueSummary !== '' ? "({$issueSummary})" : '';
+                                        $greeting = "Halo, {$consultation->full_name} kami dari DInas PPKBD Kota Tomohon akan memberikan konsultasi terkait dengan keluhan anda";
+                                        if ($issueSegment !== '') {
+                                            $greeting .= " {$issueSegment}";
+                                        }
+                                        $whatsappMessage = $greeting . "\n\n";
+                                        $whatsappMessage .= "Berikut Dibawah ini adalah jawaban dari keluhan anda:\n\n";
+                                        $whatsappMessage .= "Jika ada yang ingin ditanyakan lagi jangan sungkan,\n";
+                                        $whatsappMessage .= "Homat Kami DInas PPKBD kota Tomohon";
+                                        $encodedWhatsappMessage = rawurlencode($whatsappMessage);
+                                    @endphp
                                     <tr>
                                         <td class="px-4 py-3">
                                             <div class="font-semibold text-slate-900">{{ $consultation->full_name }}</div>
@@ -131,7 +168,7 @@
                                         <td class="px-4 py-3 text-slate-600">
                                             <div>{{ $consultation->whatsapp_number ?? '-' }}</div>
                                             @if ($sanitizedWhatsapp)
-                                                <a href="https://wa.me/{{ $sanitizedWhatsapp }}" target="_blank" rel="noopener" class="accent-link">
+                                                <a href="https://wa.me/{{ $sanitizedWhatsapp }}?text={{ $encodedWhatsappMessage }}" target="_blank" rel="noopener" class="accent-link">
                                                     Hubungi melalui WhatsApp
                                                 </a>
                                             @endif
@@ -159,12 +196,10 @@
                     </div>
 
                     @if ($consultations instanceof \Illuminate\Pagination\LengthAwarePaginator)
-                        <div class="mt-4">{{ $consultations->withQueryString()->links() }}</div>
+                        <div class="mt-4">{{ $consultations->links() }}</div>
                     @endif
                 </section>
             </section>
         </main>
     </div>
 @endsection
-
-

@@ -8,15 +8,15 @@
     ];
 @endphp
 
-<aside class="w-full rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:w-64">
+<aside class="w-full rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:fixed lg:inset-y-0 lg:left-0 lg:z-40 lg:flex lg:h-screen lg:w-64 lg:flex-col lg:overflow-y-auto lg:rounded-none lg:border-0 lg:border-r lg:border-slate-200 lg:px-6 lg:py-10 lg:shadow-none xl:w-72">
     <p class="text-xs font-semibold uppercase tracking-wide text-red-600">Navigasi Admin</p>
-    <nav class="mt-4 flex flex-col gap-2 text-sm font-medium text-slate-700" aria-label="Sections">
+    <nav class="mt-4 flex flex-col gap-1.5 text-sm font-medium text-slate-700 lg:flex-1" aria-label="Sections">
         @foreach ($navLinks as $link)
             @php($isActive = $activeLink === $link['key'])
             <a
                 href="{{ $link['href'] }}"
                 @class([
-                    'flex items-center gap-2 rounded-xl border px-4 py-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+                    'flex items-center gap-3 rounded-xl border px-3.5 py-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
                     'border-red-600 bg-red-600 text-white focus-visible:ring-red-600' => $isActive,
                     'border-slate-200 text-slate-600 hover:border-slate-300 hover:text-red-600 focus-visible:ring-red-600' => ! $isActive,
                 ])
@@ -55,7 +55,7 @@
         @endforeach
     </nav>
 
-    <div class="mt-6 border-t border-slate-200 pt-6">
+    <div class="mt-6 border-t border-slate-200 pt-5 lg:mt-auto">
         <p class="text-xs font-semibold uppercase tracking-wide text-red-600">Aksi</p>
         <form method="POST" action="{{ route('logout') }}" class="mt-4">
             @csrf

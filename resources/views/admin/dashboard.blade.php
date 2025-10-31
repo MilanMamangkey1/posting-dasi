@@ -21,20 +21,36 @@
         </div>
     </header>
 
-    <div class="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-8 lg:flex-row">
+    <div class="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-8 lg:flex-row lg:items-start lg:gap-10">
         @include('admin.partials.sidebar', ['active' => 'dashboard'])
 
         <main class="flex-1 space-y-12">
             @if ($statusMessage)
-                <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-                    {{ $statusMessage }}
-                </div>
+                @push('scripts')
+                    <script>
+                        const toastSuccessPayload = { type: 'success', message: @json($statusMessage) };
+                        if (typeof window.enqueueToast === 'function') {
+                            window.enqueueToast(toastSuccessPayload);
+                        } else {
+                            window.__toastQueue = window.__toastQueue || [];
+                            window.__toastQueue.push(toastSuccessPayload);
+                        }
+                    </script>
+                @endpush
             @endif
 
             @if ($statusError)
-                <div class="rounded-lg border border-red-600 bg-white px-4 py-3 text-sm text-red-600">
-                    {{ $statusError }}
-                </div>
+                @push('scripts')
+                    <script>
+                        const toastErrorPayload = { type: 'error', message: @json($statusError) };
+                        if (typeof window.enqueueToast === 'function') {
+                            window.enqueueToast(toastErrorPayload);
+                        } else {
+                            window.__toastQueue = window.__toastQueue || [];
+                            window.__toastQueue.push(toastErrorPayload);
+                        }
+                    </script>
+                @endpush
             @endif
 
             <section id="metrics" class="space-y-6">

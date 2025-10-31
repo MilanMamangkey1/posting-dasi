@@ -19,7 +19,7 @@
         </div>
     </header>
 
-    <div class="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-8 lg:flex-row">
+    <div class="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-8 lg:flex-row lg:items-start lg:gap-10">
         @include('admin.partials.sidebar', ['active' => 'consultations_archive'])
 
         <main class="flex-1 space-y-8">
@@ -105,7 +105,7 @@
                     </div>
 
                     @if ($archives instanceof \Illuminate\Pagination\LengthAwarePaginator)
-                        <div class="mt-4">{{ $archives->withQueryString()->links() }}</div>
+                        <div class="mt-4">{{ $archives->links() }}</div>
                     @endif
                 </section>
             </section>

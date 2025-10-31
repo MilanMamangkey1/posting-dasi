@@ -258,9 +258,17 @@
             </p>
 
             @if ($submissionStatus)
-                <div class="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-                    {{ $submissionStatus }}
-                </div>
+                @push('scripts')
+                    <script>
+                        const toastPublicConsultationPayload = { type: 'success', message: @json($submissionStatus) };
+                        if (typeof window.enqueueToast === 'function') {
+                            window.enqueueToast(toastPublicConsultationPayload);
+                        } else {
+                            window.__toastQueue = window.__toastQueue || [];
+                            window.__toastQueue.push(toastPublicConsultationPayload);
+                        }
+                    </script>
+                @endpush
             @endif
 
             @if ($errors->any())
@@ -269,58 +277,169 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('public.consultations.store') }}" class="mt-6 space-y-4">
+            <form
+                method="POST"
+                action="{{ route('public.consultations.store') }}"
+                class="mt-6"
+            >
                 @csrf
-                <div class="flex flex-col gap-2">
-                    <label for="full_name" class="text-sm font-medium text-slate-700">Nama Lengkap</label>
-                    <input
-                        id="full_name"
-                        name="full_name"
-                        type="text"
-                        value="{{ old('full_name') }}"
-                        required
-                        class="form-input"
-                    >
+                @php($recaptchaKey = config('services.recaptcha.key'))
+                <div class="overflow-hidden rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="grid gap-3 bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500 md:grid-cols-5">
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-slate-500 shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-4 w-4">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 12a4 4 0 100-8 4 4 0 000 8zM19.5 20.25a7.5 7.5 0 00-15 0" />
+                                </svg>
+                            </span>
+                            <span>Data Pemohon</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-slate-500 shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-4 w-4">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.593 3.322a1 1 0 011.4.163l1.95 2.437a2 2 0 01.09 2.43l-8.359 11.51a2 2 0 01-3.138.146l-4.4-5.145a2 2 0 01.141-2.825l11.316-10.716z" />
+                                </svg>
+                            </span>
+                            <span>Alamat Domisili</span>
+                        </div>
+                        <div class="flex items-center gap-2 md:col-span-2">
+                            <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-slate-500 shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-4 w-4">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.5 4.5h15m-15 15h15M8.25 9h3m-3 3h7.5m-7.5 3h6" />
+                                </svg>
+                            </span>
+                            <span>Detail Permasalahan</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-slate-500 shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-4 w-4">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 6.75l9 4.5 9-4.5m-18 0a1.5 1.5 0 01.832-1.342l8.25-4.125a1.5 1.5 0 011.336 0l8.25 4.125A1.5 1.5 0 0121.75 6.75v10.5a1.5 1.5 0 01-.832 1.342l-8.25 4.125a1.5 1.5 0 01-1.336 0l-8.25-4.125A1.5 1.5 0 012.25 17.25V6.75z" />
+                                </svg>
+                            </span>
+                            <span>Kontak &amp; Pengajuan</span>
+                        </div>
+                    </div>
+                    <div class="divide-y border-t border-slate-200">
+                        <div class="grid gap-6 bg-white px-4 py-6 md:grid-cols-5">
+                            <div class="space-y-3 md:col-span-1">
+                                <label for="full_name" class="text-sm font-semibold text-slate-700">Nama Lengkap</label>
+                                <div class="relative">
+                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-5 w-5">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a6.75 6.75 0 0113.5 0" />
+                                        </svg>
+                                    </span>
+                                    <input
+                                        id="full_name"
+                                        name="full_name"
+                                        type="text"
+                                        value="{{ old('full_name') }}"
+                                        required
+                                        placeholder="Masukkan nama lengkap"
+                                        class="form-input pl-12"
+                                    >
+                                </div>
+                                @error('full_name')
+                                    <p class="text-xs text-red-600">{{ $message }}</p>
+                                @enderror
+                                <p class="text-xs text-slate-500">Tuliskan nama pemohon sesuai identitas.</p>
+                            </div>
+                            <div class="space-y-3 md:col-span-1">
+                                <label for="address" class="text-sm font-semibold text-slate-700">Alamat</label>
+                                <div class="relative">
+                                    <span class="pointer-events-none absolute left-4 top-4 text-slate-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-5 w-5">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 21s8.25-4.5 8.25-10.5A8.25 8.25 0 003.75 10.5C3.75 16.5 12 21 12 21z" />
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 12a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+                                        </svg>
+                                    </span>
+                                    <textarea
+                                        id="address"
+                                        name="address"
+                                        rows="4"
+                                        required
+                                        placeholder="Tuliskan alamat lengkap beserta kelurahan/kecamatan"
+                                        class="form-input pl-12"
+                                    >{{ old('address') }}</textarea>
+                                </div>
+                                @error('address')
+                                    <p class="text-xs text-red-600">{{ $message }}</p>
+                                @enderror
+                                <p class="text-xs text-slate-500">Cantumkan alamat lengkap agar kami mudah memetakan wilayah.</p>
+                            </div>
+                            <div class="space-y-3 md:col-span-2">
+                                <label for="issue_description" class="text-sm font-semibold text-slate-700">Deskripsi Permasalahan</label>
+                                <div class="relative">
+                                    <span class="pointer-events-none absolute left-4 top-4 text-slate-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-5 w-5">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.75 5.25h10.5M6.75 9.75h10.5M6.75 14.25h6" />
+                                        </svg>
+                                    </span>
+                                    <textarea
+                                        id="issue_description"
+                                        name="issue_description"
+                                        rows="6"
+                                        required
+                                        placeholder="Sampaikan keluhan atau kebutuhan konsultasi Anda secara ringkas namun jelas"
+                                        class="form-input pl-12"
+                                    >{{ old('issue_description') }}</textarea>
+                                </div>
+                                @error('issue_description')
+                                    <p class="text-xs text-red-600">{{ $message }}</p>
+                                @enderror
+                                <p class="text-xs text-slate-500">Contoh: kronologi singkat, kondisi terkini, atau dukungan yang diharapkan.</p>
+                            </div>
+                            <div class="flex flex-col gap-4 md:col-span-1">
+                                <div class="space-y-3">
+                                    <label for="whatsapp_number" class="text-sm font-semibold text-slate-700">Nomor WhatsApp</label>
+                                    <div class="relative">
+                                        <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-emerald-500">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-5 w-5">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.25 12a8.25 8.25 0 11-16.5 0 8.25 8.25 0 0116.5 0z" />
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 9.75h.008v.008H9.75V9.75zM14.25 9.75h.008v.008h-.008V9.75z" />
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.438 13.5a3.375 3.375 0 005.124 0" />
+                                            </svg>
+                                        </span>
+                                        <input
+                                            id="whatsapp_number"
+                                            name="whatsapp_number"
+                                            type="tel"
+                                            value="{{ old('whatsapp_number') }}"
+                                            required
+                                            placeholder="+6281234567890"
+                                            class="form-input pl-12"
+                                        >
+                                    </div>
+                                    @error('whatsapp_number')
+                                        <p class="text-xs text-red-600">{{ $message }}</p>
+                                    @enderror
+                                    <p class="text-xs text-slate-500">Gunakan format internasional (contoh: +6281234567890).</p>
+                                </div>
+                                <div class="space-y-3">
+                                    <span class="text-sm font-semibold text-slate-700">Verifikasi Keamanan</span>
+                                    @if ($recaptchaKey)
+                                        <div class="g-recaptcha" data-sitekey="{{ $recaptchaKey }}"></div>
+                                        <p class="text-xs text-slate-500">Centang kotak di atas sebelum mengirimkan pengajuan.</p>
+                                    @else
+                                        <p class="text-xs text-red-600">captcha di sini.</p>
+                                    @endif
+                                    @error('g-recaptcha-response')
+                                        <p class="text-xs text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <button
+                                    type="submit"
+                                    class="primary-button inline-flex w-full items-center justify-center gap-2"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-5 w-5">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.5 12h15m0 0l-4.5-4.5M19.5 12l-4.5 4.5" />
+                                    </svg>
+                                    Kirim Pengajuan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex flex-col gap-2">
-                    <label for="address" class="text-sm font-medium text-slate-700">Alamat</label>
-                    <textarea
-                        id="address"
-                        name="address"
-                        rows="3"
-                        required
-                        class="form-input"
-                    >{{ old('address') }}</textarea>
-                </div>
-                <div class="flex flex-col gap-2">
-                    <label for="issue_description" class="text-sm font-medium text-slate-700">Deskripsi Permasalahan</label>
-                    <textarea
-                        id="issue_description"
-                        name="issue_description"
-                        rows="4"
-                        required
-                        class="form-input"
-                    >{{ old('issue_description') }}</textarea>
-                </div>
-                <div class="flex flex-col gap-2">
-                    <label for="whatsapp_number" class="text-sm font-medium text-slate-700">Nomor WhatsApp</label>
-                    <input
-                        id="whatsapp_number"
-                        name="whatsapp_number"
-                        type="tel"
-                        value="{{ old('whatsapp_number') }}"
-                        placeholder="+628xxxxxxxxxx"
-                        required
-                        class="form-input"
-                    >
-                    <p class="text-xs text-slate-500">Gunakan format internasional (contoh: +6281234567890).</p>
-                </div>
-                <button
-                    type="submit"
-                    class="primary-button inline-flex items-center justify-center gap-2"
-                >
-                    Kirim Pengajuan
-                </button>
             </form>
         </section>
     </main>
@@ -362,6 +481,12 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        @if (config('services.recaptcha.key'))
+            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        @endif
+    @endpush
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

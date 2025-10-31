@@ -24,6 +24,7 @@ class UpdateEducationalContentRequest extends FormRequest
             'title' => ['sometimes', 'string', 'max:255'],
             'type' => ['sometimes', 'string', Rule::in(EducationalContent::TYPES)],
             'summary' => ['sometimes', 'nullable', 'string'],
+            'event_date' => ['sometimes', 'nullable', 'date'],
             'body' => [
                 'sometimes',
                 Rule::when(
@@ -44,11 +45,11 @@ class UpdateEducationalContentRequest extends FormRequest
                 'sometimes',
                 Rule::when(
                     fn () => $type === EducationalContent::TYPE_PHOTO,
-                    ['image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120']
+                    ['image', 'mimes:jpg,jpeg,png,gif,webp', 'max:3072']
                 ),
                 Rule::when(
                     fn () => $type === EducationalContent::TYPE_MATERIAL,
-                    ['file', 'mimes:pdf,doc,docx,ppt,pptx', 'max:10240']
+                    ['file', 'mimes:pdf,doc,docx,ppt,pptx', 'max:3072']
                 ),
                 Rule::when(
                     fn () => ! in_array($type, [EducationalContent::TYPE_PHOTO, EducationalContent::TYPE_MATERIAL], true),

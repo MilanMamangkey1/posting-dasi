@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Frontend;
 
+use App\Rules\Recaptcha;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreConsultationRequest extends FormRequest
@@ -21,6 +22,7 @@ class StoreConsultationRequest extends FormRequest
             'address' => ['required', 'string', 'max:500'],
             'issue_description' => ['required', 'string'],
             'whatsapp_number' => ['required', 'string', 'regex:/^\+?[1-9]\d{7,14}$/'],
+            'g-recaptcha-response' => ['required', 'string', new Recaptcha()],
         ];
     }
 

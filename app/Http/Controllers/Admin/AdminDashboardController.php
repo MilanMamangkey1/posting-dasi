@@ -8,6 +8,8 @@ use App\Models\ConsultationRequest;
 use App\Models\EducationalContent;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
 class AdminDashboardController extends Controller
@@ -59,28 +61,79 @@ class AdminDashboardController extends Controller
 
     public function consultations(Request $request): View
     {
+        $allowedRanges = ['7_days', '1_month', 'all'];
         $consultationFilters = [
             'status' => $request->query('consultation_status'),
             'search' => $request->query('consultation_search'),
+            'date_range' => $request->query('consultation_range', 'all'),
         ];
 
-        $consultationsQuery = ConsultationRequest::query()->latest();
+        if (! in_array($consultationFilters['date_range'], $allowedRanges, true)) {
+            $consultationFilters['date_range'] = 'all';
+        }
+
+        $statusOrderSql = <<<'SQL'
+CASE status
+    WHEN ? THEN 0
+    WHEN ? THEN 1
+    WHEN ? THEN 2
+    WHEN ? THEN 3
+    ELSE 4
+END
+SQL;
+
+        $consultationsQuery = ConsultationRequest::query()
+            ->orderByRaw(
+                $statusOrderSql,
+                [
+                    ConsultationRequest::STATUS_PENDING,
+                    ConsultationRequest::STATUS_IN_PROGRESS,
+                    ConsultationRequest::STATUS_RESOLVED,
+                    ConsultationRequest::STATUS_ARCHIVED,
+                ]
+            )
+            ->latest();
         if ($consultationFilters['status']) {
             $consultationsQuery->where('status', $consultationFilters['status']);
         }
-        if ($consultationFilters['search']) {
-            $search = $consultationFilters['search'];
-            $consultationsQuery->where(function ($inner) use ($search): void {
-                $inner->where('full_name', 'like', '%' . $search . '%')
-                    ->orWhere('whatsapp_number', 'like', '%' . $search . '%');
-            });
+        if ($consultationFilters['date_range'] === '7_days') {
+            $consultationsQuery->where('created_at', '>=', now()->subDays(7));
+        } elseif ($consultationFilters['date_range'] === '1_month') {
+            $consultationsQuery->where('created_at', '>=', now()->subMonth());
         }
 
+        $dateRangeOptions = [
+            '7_days' => '7 Hari Terakhir',
+            '1_month' => '1 Bulan Terakhir',
+            'all' => 'Semua Waktu',
+        ];
+
+        $searchTerm = $consultationFilters['search'];
+        $consultations = $consultationsQuery->get();
+        if ($searchTerm) {
+            $normalizedSearch = $this->normalizeDigits($searchTerm);
+            $consultations = $consultations->filter(function ($item) use ($searchTerm, $normalizedSearch) {
+                $nameMatch = stripos($item->full_name ?? '', $searchTerm) !== false;
+                $numberMatch = false;
+
+                if ($normalizedSearch !== '') {
+                    $sanitizedNumber = $this->normalizeDigits($item->whatsapp_number ?? '');
+                    $numberMatch = str_contains($sanitizedNumber, $normalizedSearch);
+                }
+
+                return $nameMatch || $numberMatch;
+            })->values();
+        }
+
+        $paginatedConsultations = $this->paginateCollection($consultations, 10, (int) $request->query('page', 1));
+        $paginatedConsultations->appends($request->except('page'));
+
         return view('admin.consultations', [
-            'consultations' => $consultationsQuery->paginate(10)->withQueryString(),
+            'consultations' => $paginatedConsultations,
             'consultationFilters' => $consultationFilters,
             'consultationStatuses' => ConsultationRequest::STATUSES,
             'consultationStatusLabels' => ConsultationRequest::STATUS_LABELS,
+            'consultationDateRanges' => $dateRangeOptions,
             'statusMessage' => session('admin_status'),
             'statusError' => session('admin_error'),
         ]);
@@ -94,16 +147,28 @@ class AdminDashboardController extends Controller
 
         $archivesQuery = ArchivedConsultationRequest::query()->latest('archived_at');
 
+        $archives = $archivesQuery->get();
         if ($filters['search']) {
-            $search = $filters['search'];
-            $archivesQuery->where(function ($inner) use ($search): void {
-                $inner->where('full_name', 'like', '%' . $search . '%')
-                    ->orWhere('whatsapp_number', 'like', '%' . $search . '%');
-            });
+            $searchTerm = $filters['search'];
+            $normalizedSearch = $this->normalizeDigits($searchTerm);
+            $archives = $archives->filter(function ($item) use ($searchTerm, $normalizedSearch) {
+                $nameMatch = stripos($item->full_name ?? '', $searchTerm) !== false;
+                $numberMatch = false;
+
+                if ($normalizedSearch !== '') {
+                    $sanitizedNumber = $this->normalizeDigits($item->whatsapp_number ?? '');
+                    $numberMatch = str_contains($sanitizedNumber, $normalizedSearch);
+                }
+
+                return $nameMatch || $numberMatch;
+            })->values();
         }
 
+        $paginatedArchives = $this->paginateCollection($archives, 10, (int) $request->query('page', 1));
+        $paginatedArchives->appends($request->except('page'));
+
         return view('admin.consultations-archive', [
-            'archives' => $archivesQuery->paginate(10)->withQueryString(),
+            'archives' => $paginatedArchives,
             'filters' => $filters,
             'consultationStatusLabels' => ConsultationRequest::STATUS_LABELS,
         ]);
@@ -139,11 +204,32 @@ class AdminDashboardController extends Controller
             'recent_contents' => EducationalContent::query()
                 ->latest()
                 ->take(5)
-                ->get(['id', 'title', 'type', 'file_path', 'file_size_bytes', 'updated_at']),
+                ->get(['id', 'title', 'type', 'file_path', 'file_size_bytes', 'event_date', 'updated_at']),
             'recent_consultations' => ConsultationRequest::query()
                 ->latest()
                 ->take(5)
                 ->get(['id', 'full_name', 'status', 'updated_at']),
         ];
+    }
+
+    private function paginateCollection(Collection $items, int $perPage, int $page = 1, string $pageName = 'page'): LengthAwarePaginator
+    {
+        $page = max(1, (int) $page);
+
+        return new LengthAwarePaginator(
+            $items->forPage($page, $perPage)->values(),
+            $items->count(),
+            $perPage,
+            $page,
+            [
+                'path' => LengthAwarePaginator::resolveCurrentPath(),
+                'pageName' => $pageName,
+            ]
+        );
+    }
+
+    private function normalizeDigits(?string $value): string
+    {
+        return $value ? preg_replace('/\D+/', '', $value) : '';
     }
 }

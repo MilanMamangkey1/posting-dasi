@@ -10,7 +10,9 @@ use App\Models\ConsultationRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,20 +26,31 @@ class ConsultationRequestController extends Controller
             $query->where('status', $request->query('status'));
         }
 
-        if ($request->filled('search')) {
-            $search = $request->query('search');
-            $query->where(function ($inner) use ($search) {
-                $inner->where('full_name', 'like', '%' . $search . '%')
-                    ->orWhere('whatsapp_number', 'like', '%' . $search . '%');
-            });
-        }
-
         $perPage = (int) $request->query('per_page', 15);
         $perPage = $perPage > 0 ? $perPage : 15;
 
-        return response()->json(
-            $query->paginate($perPage)
-        );
+        $items = $query->get();
+        if ($request->filled('search')) {
+            $searchTerm = $request->query('search');
+            $normalizedSearch = $this->normalizeDigits($searchTerm);
+            $items = $items->filter(function ($item) use ($searchTerm, $normalizedSearch) {
+                $nameMatch = stripos($item->full_name ?? '', $searchTerm) !== false;
+                $numberMatch = false;
+
+                if ($normalizedSearch !== '') {
+                    $sanitizedNumber = $this->normalizeDigits($item->whatsapp_number ?? '');
+                    $numberMatch = str_contains($sanitizedNumber, $normalizedSearch);
+                }
+
+                return $nameMatch || $numberMatch;
+            })->values();
+        }
+
+        $page = max(1, (int) $request->query('page', 1));
+        $paginator = $this->paginateCollection($items, $perPage, $page);
+        $paginator->appends($request->except('page'));
+
+        return response()->json($paginator);
     }
 
     public function store(StoreConsultationRequestRequest $request): JsonResponse|RedirectResponse
@@ -160,5 +173,26 @@ class ConsultationRequestController extends Controller
         if (! array_key_exists('handled_by', $data) && $request->user()) {
             $data['handled_by'] = $request->user()->id;
         }
+    }
+
+    private function paginateCollection(Collection $items, int $perPage, int $page = 1, string $pageName = 'page'): LengthAwarePaginator
+    {
+        $page = max(1, (int) $page);
+
+        return new LengthAwarePaginator(
+            $items->forPage($page, $perPage)->values(),
+            $items->count(),
+            $perPage,
+            $page,
+            [
+                'path' => LengthAwarePaginator::resolveCurrentPath(),
+                'pageName' => $pageName,
+            ]
+        );
+    }
+
+    private function normalizeDigits(?string $value): string
+    {
+        return $value ? preg_replace('/\D+/', '', $value) : '';
     }
 }

@@ -37,6 +37,7 @@ class EducationalContent extends Model
         'title',
         'type',
         'summary',
+        'event_date',
         'body',
         'source_url',
         'file_path',
@@ -47,6 +48,7 @@ class EducationalContent extends Model
 
     protected $casts = [
         'file_size_bytes' => 'integer',
+        'event_date' => 'date',
     ];
 
     protected $appends = [

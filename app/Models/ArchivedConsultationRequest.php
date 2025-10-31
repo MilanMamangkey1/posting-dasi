@@ -27,6 +27,8 @@ class ArchivedConsultationRequest extends Model
         'handled_at' => 'datetime',
         'resolved_at' => 'datetime',
         'archived_at' => 'datetime',
+        'address' => 'encrypted',
+        'whatsapp_number' => 'encrypted',
     ];
 
     public function handler()

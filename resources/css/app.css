@@ -82,4 +82,40 @@
     .accent-link {
         @apply text-sm font-semibold text-red-600 hover:text-red-600 hover:underline;
     }
+
+    .toast-container {
+        @apply pointer-events-none fixed top-6 right-6 z-50 flex max-w-sm flex-col gap-3 sm:top-8 sm:right-8;
+    }
+
+    .toast {
+        @apply pointer-events-auto relative flex w-full items-start gap-3 overflow-hidden rounded-2xl border px-4 py-3 text-sm shadow-lg transition;
+    }
+
+    .toast--success {
+        @apply border-emerald-200 bg-emerald-50 text-emerald-700;
+    }
+
+    .toast--error {
+        @apply border-rose-200 bg-rose-50 text-rose-700;
+    }
+
+    .toast--info {
+        @apply border-sky-200 bg-sky-50 text-sky-700;
+    }
+
+    .toast__icon {
+        @apply mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white shadow;
+    }
+
+    .toast__close {
+        @apply ml-auto inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/60 text-slate-500 transition hover:bg-white hover:text-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600;
+    }
+
+    .toast__progress {
+        @apply absolute bottom-0 left-0 h-1 w-full bg-black/10;
+    }
+
+    .toast__progress-bar {
+        @apply h-full w-full bg-red-600/70 transition-[width];
+    }
 }
