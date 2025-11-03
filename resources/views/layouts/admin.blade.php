@@ -9,8 +9,8 @@
         <link rel="icon" type="image/png" href="{{ asset('storage/logo/logotomohon.png') }}">
     <link rel="shortcut icon" type="image/png" href="{{ asset('storage/logo/logotomohon.png') }}">
     </head>
-    <body class="min-h-screen bg-white font-sans text-slate-900 antialiased lg:pl-64 xl:pl-72">
-        <div class="min-h-screen">
+    <body class="min-h-screen bg-white font-sans text-slate-900 antialiased">
+        <div class="min-h-screen lg:pl-64 xl:pl-72">
             @yield('body')
         </div>
         <div class="toast-container" data-toast-root></div>

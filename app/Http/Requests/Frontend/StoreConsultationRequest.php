@@ -35,6 +35,16 @@ class StoreConsultationRequest extends FormRequest
         return $rules;
     }
 
+    /**
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'address.max' => 'Alamat tidak boleh lebih dari 500 karakter.',
+        ];
+    }
+
     protected function prepareForValidation(): void
     {
         if ($this->has('whatsapp_number')) {

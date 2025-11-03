@@ -182,14 +182,13 @@
                                         $sanitizedWhatsapp = preg_replace('/[^0-9]/', '', $consultation->whatsapp_number ?? '');
                                         $issueSummary = trim(preg_replace('/\s+/', ' ', $consultation->issue_description ?? ''));
                                         $issueSegment = $issueSummary !== '' ? "({$issueSummary})" : '';
-                                        $greeting = "Halo, {$consultation->full_name} kami dari DInas PPKBD Kota Tomohon akan memberikan konsultasi terkait dengan keluhan anda";
+                                        $greeting = "Halo, {$consultation->full_name} kami dari Dinas PPKBD Kota Tomohon akan memberikan konsultasi terkait dengan keluhan anda";
                                         if ($issueSegment !== '') {
                                             $greeting .= " {$issueSegment}";
                                         }
                                         $whatsappMessage = $greeting . "\n\n";
-                                        $whatsappMessage .= "Berikut Dibawah ini adalah jawaban dari keluhan anda:\n\n";
                                         $whatsappMessage .= "Jika ada yang ingin ditanyakan lagi jangan sungkan,\n";
-                                        $whatsappMessage .= "Homat Kami DInas PPKBD kota Tomohon";
+                                        $whatsappMessage .= "Hormat Kami Dinas PPKBD kota Tomohon\n\n";
                                         $encodedWhatsappMessage = rawurlencode($whatsappMessage);
 
                                         $statusColors = [

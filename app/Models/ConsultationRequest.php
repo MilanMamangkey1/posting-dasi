@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasEncryptedContactFields;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ConsultationRequest extends Model
 {
     use HasFactory;
+    use HasEncryptedContactFields;
 
     public const STATUS_PENDING = 'pending';
     public const STATUS_IN_PROGRESS = 'in_progress';
@@ -41,8 +43,6 @@ class ConsultationRequest extends Model
 
     protected $casts = [
         'handled_at' => 'datetime',
-        'address' => 'encrypted',
-        'whatsapp_number' => 'encrypted',
     ];
 
     public static function labelForStatus(string $status): string

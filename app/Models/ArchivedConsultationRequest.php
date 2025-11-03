@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasEncryptedContactFields;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ArchivedConsultationRequest extends Model
 {
     use HasFactory;
+    use HasEncryptedContactFields;
 
     protected $fillable = [
         'consultation_request_id',
@@ -27,8 +29,6 @@ class ArchivedConsultationRequest extends Model
         'handled_at' => 'datetime',
         'resolved_at' => 'datetime',
         'archived_at' => 'datetime',
-        'address' => 'encrypted',
-        'whatsapp_number' => 'encrypted',
     ];
 
     public function handler()
