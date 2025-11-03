@@ -3,24 +3,30 @@
 @section('title', 'Admin Dashboard')
 
 @section('body')
-    <header class="bg-white border-b border-slate-200">
-        <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-5">
-            <div>
-                <h1 class="flex items-center gap-3 text-2xl font-semibold text-slate-900">
-                    <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-red-600 bg-white text-red-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-5 w-5">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.5 3h5.25v5.25H4.5V3zm9.75 0H19.5v5.25h-5.25V3zm0 9.75H19.5V18h-5.25v-5.25zM4.5 12.75H9.75V18H4.5v-5.25z" />
-                        </svg>
-                    </span>
-                    Website Posting Dasi &mdash; Area Admin
-                </h1>
-                <p class="text-sm text-slate-600">
-                    Dashboard sederhana tanpa ketergantungan JavaScript berlebih.
-                </p>
-            </div>
+   <header class="bg-white border-b border-slate-200 shadow-sm">
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-5">
+        <div>
+            <h1 class="flex items-center gap-3 text-2xl font-bold text-slate-900">
+                <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-red-500 to-red-600 text-white shadow-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                </span>
+                Dashboard Admin Posting Dasi
+            </h1>
+            <p class="mt-1 text-sm text-slate-600">Kelola konten edukasi dan permintaan konsultasi dengan mudah.</p>
         </div>
-    </header>
-
+        <div class="flex items-center gap-3">
+            <span class="inline-flex items-center gap-2 rounded-full bg-green-50 px-3 py-1.5 text-xs font-medium text-green-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                Online
+            </span>
+            <span class="text-xs text-slate-500">Terakhir diperbarui {{ now()->translatedFormat('d M Y') }}</span>
+        </div>
+    </div>
+</header>
     <div class="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-8 lg:flex-row lg:items-start lg:gap-10">
         @include('admin.partials.sidebar', ['active' => 'dashboard'])
 
@@ -53,166 +59,249 @@
                 @endpush
             @endif
 
-            <section id="metrics" class="space-y-6">
+            <!-- Statistik Utama -->
+            <section class="space-y-6">
                 <div class="flex flex-wrap items-center justify-between gap-4">
                     <div>
-                        <h2 class="flex items-center gap-2 text-xl font-semibold text-slate-900">
-                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full border border-red-600 bg-white text-red-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-4 w-4">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 19.5h18M7.5 15V9.75M12 15V6M16.5 15V12" />
+                        <h2 class="flex items-center gap-3 text-xl font-bold text-slate-900">
+                            <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-red-500 to-red-600 text-white shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
                                 </svg>
                             </span>
-                            Ringkasan Data
+                            Ringkasan Statistik
                         </h2>
-                        <p class="text-sm text-slate-600">Pantau metrik inti Posting Dasi.</p>
-                    </div>
-                    <div class="text-xs uppercase text-red-600">
-                        Terakhir diperbarui {{ now()->translatedFormat('d M Y, H:i') }}
+                        <p class="mt-1 text-sm text-slate-600">Tinjau metrik utama platform Posting Dasi</p>
                     </div>
                 </div>
-                <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    <article class="metric-card">
-                        <div class="metric-card__body">
-                            <dt>Total Konten</dt>
-                            <dd>{{ $metrics['total_contents'] }}</dd>
+
+                <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                    <!-- Total Konten -->
+                    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-slate-600">Total Konten</p>
+                                <p class="text-2xl font-bold text-slate-900">{{ $metrics['total_contents'] }}</p>
+                            </div>
                         </div>
-                        <p class="metric-card__hint">Akumulasi konten edukasi terdaftar.</p>
-                    </article>
-                    <article class="metric-card">
-                        <div class="metric-card__body">
-                            <dt>Total Konsultasi</dt>
-                            <dd>{{ $metrics['total_consultations'] }}</dd>
+                        <p class="mt-3 text-xs text-slate-500">Akumulasi konten edukasi terdaftar</p>
+                    </div>
+
+                    <!-- Total Konsultasi -->
+                    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-green-500 to-green-600 text-white shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-slate-600">Total Konsultasi</p>
+                                <p class="text-2xl font-bold text-slate-900">{{ $metrics['total_consultations'] }}</p>
+                            </div>
                         </div>
-                        <p class="metric-card__hint">Jumlah permintaan konsultasi yang masuk.</p>
-                    </article>
-                    <article class="metric-card sm:col-span-2">
-                        <div class="metric-card__body">
-                            <dt>Konten per Jenis</dt>
-                            <dd class="text-base font-semibold text-slate-900">
-                                @foreach ($metrics['contents_by_type'] as $type => $total)
-                                    <span class="mr-3 uppercase text-xs text-red-600">{{ $contentTypeLabels[$type] ?? ucfirst($type) }}</span>
-                                    <span class="mr-4 text-sm text-slate-900">{{ $total }}</span>
-                                @endforeach
-                            </dd>
+                        <p class="mt-3 text-xs text-slate-500">Permintaan konsultasi yang masuk</p>
+                    </div>
+
+                    <!-- Distribusi Konten -->
+                    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:col-span-2 lg:col-span-2">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
+                                    <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-slate-600">Distribusi Konten</p>
+                                <p class="text-lg font-bold text-slate-900">Per Jenis</p>
+                            </div>
                         </div>
-                        <p class="metric-card__hint">Distribusi video, foto, narasi, dan materi.</p>
-                    </article>
-                    <article class="metric-card sm:col-span-2 lg:col-span-4">
-                        <div class="metric-card__body">
-                            <dt>Status Konsultasi</dt>
-                            <dd class="text-base font-semibold text-slate-900">
-                                @foreach ($metrics['consultations_by_status'] as $status => $total)
-                                    <span class="mr-3 uppercase text-xs text-red-600">{{ $consultationStatusLabels[$status] ?? str_replace('_', ' ', $status) }}</span>
-                                    <span class="mr-4 text-sm text-slate-900">{{ $total }}</span>
-                                @endforeach
-                            </dd>
+                        <div class="grid grid-cols-2 gap-4">
+                            @foreach ($metrics['contents_by_type'] as $type => $total)
+                                <div class="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
+                                    <span class="text-xs font-medium text-slate-700 uppercase">
+                                        {{ $contentTypeLabels[$type] ?? ucfirst($type) }}
+                                    </span>
+                                    <span class="text-sm font-bold text-slate-900">{{ $total }}</span>
+                                </div>
+                            @endforeach
                         </div>
-                        <p class="metric-card__hint">Gunakan untuk memantau antrian layanan.</p>
-                    </article>
+                    </div>
+                </div>
+
+                <!-- Status Konsultasi -->
+                <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-slate-600">Status Konsultasi</p>
+                            <p class="text-lg font-bold text-slate-900">Monitoring Layanan</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                        @foreach ($metrics['consultations_by_status'] as $status => $total)
+                            <div class="flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-white p-4 text-center">
+                                <span class="text-xs font-medium text-slate-600 mb-2 uppercase">
+                                    {{ $consultationStatusLabels[$status] ?? str_replace('_', ' ', $status) }}
+                                </span>
+                                <span class="text-xl font-bold text-slate-900">{{ $total }}</span>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </section>
 
+            <!-- Aktivitas Terbaru -->
             <section class="space-y-6">
-                <h2 class="flex items-center gap-2 text-xl font-semibold text-slate-900">
-                    <span class="inline-flex h-7 w-7 items-center justify-center rounded-full border border-red-600 bg-white text-red-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-4 w-4">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6l3 1.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <h2 class="flex items-center gap-3 text-xl font-bold text-slate-900">
+                    <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-red-500 to-red-600 text-white shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
                         </svg>
                     </span>
                     Aktivitas Terbaru
                 </h2>
+
                 <div class="grid gap-6 lg:grid-cols-2">
-                    <section class="panel">
-                        <header class="panel__header">
-                            <h3 class="flex items-center gap-2">
-                                <span class="inline-flex h-6 w-6 items-center justify-center rounded-full border border-red-600 bg-white text-red-600">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-4 w-4">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 4.5h9.75a1.5 1.5 0 011.5 1.5V21l-6-3-6 3V6a1.5 1.5 0 011.5-1.5z" />
+                    <!-- Konten Terbaru -->
+                    <section class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                        <header class="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white px-6 py-4">
+                            <h3 class="flex items-center gap-3 text-lg font-semibold text-slate-900">
+                                <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
                                     </svg>
                                 </span>
                                 Konten Terbaru
                             </h3>
                         </header>
-                        <ul class="space-y-3 text-sm text-slate-700">
+                        <div class="p-6 space-y-4">
                             @forelse ($recentContents as $content)
-                                <li class="rounded-lg border border-slate-200 px-3 py-2">
-                                    <span class="font-semibold text-slate-900">{{ $content->title }}</span>
-                                    <span class="ml-2 uppercase text-xs text-red-600">({{ $contentTypeLabels[$content->type] ?? ucfirst($content->type) }})</span>
-                                    <span class="ml-3 text-xs text-slate-500">Diperbarui {{ $content->updated_at->diffForHumans() }}</span>
-                                    @if ($content->photo_url)
-                                        <a
-                                            href="{{ $content->photo_url }}"
-                                            target="_blank"
-                                            rel="noopener"
-                                        class="mt-3 block overflow-hidden rounded-md border border-slate-200 bg-white"
-                                        >
-                                            <img
-                                                src="{{ $content->photo_url }}"
-                                                alt="Pratinjau foto {{ $content->title }}"
-                                                class="h-32 w-full object-cover transition duration-200 hover:scale-[1.02]"
-                                                loading="lazy"
-                                            >
-                                        </a>
-                                    @elseif ($content->document_url)
-                                        <a
-                                            href="{{ $content->document_url }}"
-                                            target="_blank"
-                                            rel="noopener"
-                                        class="mt-3 inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-red-600 hover:text-red-600"
-                                        >
-                                            <span>Unduh {{ strtoupper($content->document_extension ?? 'Berkas') }}</span>
-                                            @if ($content->document_size_bytes)
-                                                @php
-                                                    $recentDocBytes = $content->document_size_bytes;
-                                                    $recentUnits = ['B', 'KB', 'MB', 'GB', 'TB'];
-                                                    $recentSize = (float) $recentDocBytes;
-                                                    $recentIndex = 0;
-                                                    while ($recentSize >= 1024 && $recentIndex < count($recentUnits) - 1) {
-                                                        $recentSize /= 1024;
-                                                        $recentIndex++;
-                                                    }
-                                                    $recentPrecision = $recentIndex === 0 ? 0 : 1;
-                                                    $recentFormatted = number_format($recentSize, $recentPrecision);
-                                                    $recentFormatted = rtrim(rtrim($recentFormatted, '0'), '.');
-                                                    $recentDocLabel = $recentFormatted . ' ' . $recentUnits[$recentIndex];
-                                                @endphp
-                                                <span class="text-red-600">({{ $recentDocLabel }})</span>
-                                            @endif
-                                        </a>
-                                    @endif
-                                </li>
+                                <div class="flex items-start gap-4 rounded-lg border border-slate-200 bg-white p-4 transition-all duration-200 hover:shadow-sm">
+                                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
+                                        @if($content->type === 'video')
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
+                                            </svg>
+                                        @elseif($content->type === 'photo')
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                                            </svg>
+                                        @else
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd" />
+                                            </svg>
+                                        @endif
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="font-semibold text-slate-900 truncate">{{ $content->title }}</h4>
+                                        <div class="flex items-center gap-2 mt-1">
+                                            <span class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 uppercase">
+                                                {{ $contentTypeLabels[$content->type] ?? ucfirst($content->type) }}
+                                            </span>
+                                            <span class="text-xs text-slate-500">{{ $content->updated_at->diffForHumans() }}</span>
+                                        </div>
+                                        @if ($content->photo_url)
+                                            <a href="{{ $content->photo_url }}" target="_blank" rel="noopener" class="mt-2 block">
+                                                <img src="{{ $content->photo_url }}" alt="Pratinjau {{ $content->title }}" class="h-20 w-full rounded-lg object-cover border border-slate-200">
+                                            </a>
+                                        @elseif ($content->document_url)
+                                            <a href="{{ $content->document_url }}" target="_blank" rel="noopener" class="mt-2 inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors duration-200">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                                Unduh Dokumen
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
                             @empty
-                                <li class="text-red-600">Belum ada konten.</li>
+                                <div class="text-center py-8 text-slate-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-slate-300" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
+                                    </svg>
+                                    <p class="mt-2 text-sm">Belum ada konten terdaftar</p>
+                                </div>
                             @endforelse
-                        </ul>
-                        <div class="mt-4 text-right">
-                            <a href="{{ route('admin.contents.index') }}" class="accent-link">Kelola Konten &rarr;</a>
+                        </div>
+                        <div class="border-t border-slate-100 bg-slate-50 px-6 py-4">
+                            <a href="{{ route('admin.contents.index') }}" class="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 transition-colors duration-200">
+                                <span>Kelola Semua Konten</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                </svg>
+                            </a>
                         </div>
                     </section>
-                    <section class="panel">
-                        <header class="panel__header">
-                            <h3 class="flex items-center gap-2">
-                                <span class="inline-flex h-6 w-6 items-center justify-center rounded-full border border-red-600 bg-white text-red-600">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-4 w-4">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.25 9h7.5m-7.5 3h4.5m-10.5 0a8.25 8.25 0 0114.768-4.5A7.5 7.5 0 0122.5 15.75c0 1.268-.309 2.463-.855 3.513a.75.75 0 01-.984.351l-3.09-1.375a2.25 2.25 0 00-1.876.042 7.46 7.46 0 01-3.195.719 7.5 7.5 0 01-7.5-7.5z" />
+
+                    <!-- Konsultasi Terbaru -->
+                    <section class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                        <header class="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white px-6 py-4">
+                            <h3 class="flex items-center gap-3 text-lg font-semibold text-slate-900">
+                                <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-green-500 to-green-600 text-white shadow-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd" />
                                     </svg>
                                 </span>
                                 Konsultasi Terbaru
                             </h3>
                         </header>
-                        <ul class="space-y-3 text-sm text-slate-700">
+                        <div class="p-6 space-y-4">
                             @forelse ($recentConsultations as $consultation)
-                                <li class="rounded-lg border border-slate-200 px-3 py-2">
-                                    <span class="font-semibold text-slate-900">{{ $consultation->full_name }}</span>
-                                    <span class="ml-2 uppercase text-xs text-red-600">({{ $consultationStatusLabels[$consultation->status] ?? str_replace('_', ' ', $consultation->status) }})</span>
-                                    <span class="ml-3 text-xs text-slate-500">Diperbarui {{ $consultation->updated_at->diffForHumans() }}</span>
-                                </li>
+                                <div class="flex items-start gap-4 rounded-lg border border-slate-200 bg-white p-4 transition-all duration-200 hover:shadow-sm">
+                                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 005 10c0-1.777.833-3.363 2.136-4.419A5 5 0 0010 11z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="font-semibold text-slate-900">{{ $consultation->full_name }}</h4>
+                                        <div class="flex items-center gap-2 mt-1">
+                                            @php
+                                                $statusColors = [
+                                                    'pending' => 'bg-amber-50 text-amber-700',
+                                                    'approved' => 'bg-green-50 text-green-700',
+                                                    'rejected' => 'bg-red-50 text-red-700',
+                                                    'completed' => 'bg-blue-50 text-blue-700'
+                                                ];
+                                                $statusColor = $statusColors[$consultation->status] ?? 'bg-slate-50 text-slate-700';
+                                            @endphp
+                                            <span class="inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium uppercase {{ $statusColor }}">
+                                                {{ $consultationStatusLabels[$consultation->status] ?? str_replace('_', ' ', $consultation->status) }}
+                                            </span>
+                                            <span class="text-xs text-slate-500">{{ $consultation->updated_at->diffForHumans() }}</span>
+                                        </div>
+                                        @if($consultation->email)
+                                            <p class="text-xs text-slate-600 mt-1">{{ $consultation->email }}</p>
+                                        @endif
+                                    </div>
+                                </div>
                             @empty
-                                <li class="text-red-600">Belum ada pengajuan.</li>
+                                <div class="text-center py-8 text-slate-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-slate-300" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd" />
+                                    </svg>
+                                    <p class="mt-2 text-sm">Belum ada pengajuan konsultasi</p>
+                                </div>
                             @endforelse
-                        </ul>
-                        <div class="mt-4 text-right">
-                            <a href="{{ route('admin.consultations.index') }}" class="accent-link">Kelola Konsultasi &rarr;</a>
+                        </div>
+                        <div class="border-t border-slate-100 bg-slate-50 px-6 py-4">
+                            <a href="{{ route('admin.consultations.index') }}" class="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 transition-colors duration-200">
+                                <span>Kelola Semua Konsultasi</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                </svg>
+                            </a>
                         </div>
                     </section>
                 </div>

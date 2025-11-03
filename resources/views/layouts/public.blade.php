@@ -6,6 +6,8 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>@yield('title', 'Website Posting Dasi')</title>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <link rel="icon" type="image/png" href="{{ asset('storage/logo/logotomohon.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('storage/logo/logotomohon.png') }}">
     </head>
     <body class="min-h-screen bg-white font-sans text-slate-900 antialiased">
         <div class="min-h-screen">

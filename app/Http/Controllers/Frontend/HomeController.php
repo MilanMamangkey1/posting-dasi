@@ -9,48 +9,50 @@ use Illuminate\View\View;
 
 class HomeController extends Controller
 {
+    private const PER_PAGE = 4;
+
     public function index(Request $request): View
     {
+        // === VIDEO: 4 per halaman + paginasi ===
         $videos = EducationalContent::query()
             ->where('type', EducationalContent::TYPE_VIDEO)
             ->latest()
-            ->get()
-            ->map(function (EducationalContent $content): EducationalContent {
+            ->paginate(self::PER_PAGE, ['*'], 'video_page')
+            ->through(function (EducationalContent $content): EducationalContent {
                 $content->embed_url = $this->buildYoutubeEmbedUrl($content->source_url);
-
                 return $content;
             });
 
-        $photoPage = (int) $request->query('photo_page', 1);
+        // === FOTO: 4 per halaman + paginasi ===
         $photos = EducationalContent::query()
             ->where('type', EducationalContent::TYPE_PHOTO)
             ->latest()
-            ->paginate(9, ['*'], 'photo_page', $photoPage);
+            ->paginate(self::PER_PAGE, ['*'], 'photo_page');
 
+        // === NARASI: 4 per halaman + paginasi ===
         $narratives = EducationalContent::query()
             ->where('type', EducationalContent::TYPE_NARRATIVE)
             ->latest()
-            ->get();
+            ->paginate(self::PER_PAGE, ['*'], 'narrative_page');
 
+        // === MATERI: 4 per halaman + paginasi ===
         $materials = EducationalContent::query()
             ->where('type', EducationalContent::TYPE_MATERIAL)
             ->latest()
-            ->get();
+            ->paginate(self::PER_PAGE, ['*'], 'material_page');
 
         return view('frontend.home', [
-            'videos' => $videos,
-            'photos' => $photos,
-            'narratives' => $narratives,
-            'materials' => $materials,
+            'videos'           => $videos,
+            'photos'           => $photos,
+            'narratives'        => $narratives,
+            'materials'        => $materials,
             'submissionStatus' => $request->session()->get('consultation_status'),
         ]);
     }
 
     private function buildYoutubeEmbedUrl(?string $url): ?string
     {
-        if (! $url) {
-            return null;
-        }
+        if (! $url) return null;
 
         $pattern = '%^https?://(?:www\.)?(?:youtube\.com/(?:watch\?v=|embed/|v/|shorts/)|youtu\.be/)([A-Za-z0-9_-]{11})%i';
 
