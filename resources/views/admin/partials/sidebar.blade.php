@@ -11,9 +11,7 @@
 <aside class="w-full rounded-2xl border border-slate-200 p-5 shadow-sm lg:fixed lg:inset-y-0 lg:left-0 lg:z-40 lg:flex lg:h-screen lg:w-64 lg:flex-col lg:overflow-y-auto lg:rounded-none lg:border-0 lg:border-r lg:border-slate-200 lg:px-6 lg:py-10 lg:shadow-none xl:w-72" style="background-color: #feaaaa;">
  <!-- Header dengan logo dan branding -->
 <div class="flex items-center gap-3 pb-4 border-b border-slate-100 mb-4">
-    <img src="{{ asset('storage/logo/logotomohon.png') }}" 
-         alt="Logo Posting Dasi" 
-         class="w-12 h-12 object-contain">
+    <x-app-logos size="w-11 h-11" secondary-size="w-11 h-11" gap-class="gap-2" class="shrink-0" />
     <div>
         <h1 class="text-lg font-bold text-slate-800">Admin Panel</h1>
         <p class="text-xs font-medium text-slate-500">Manajemen Sistem</p>

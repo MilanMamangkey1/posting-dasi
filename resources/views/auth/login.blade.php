@@ -39,20 +39,6 @@
                 margin-bottom: 1.5rem;
             }
             
-            .logo-placeholder {
-                width: 80px;
-                height: 80px;
-                background-color: var(--primary-red);
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-weight: bold;
-                font-size: 1.5rem;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            }
-            
             .title {
                 color: var(--primary-red);
                 font-weight: 700;
@@ -125,22 +111,20 @@
                 color: var(--text-light);
                 font-size: 0.8rem;
             }
-            .logo-image {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-    border-radius: 50%;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+            .logo-stack img {
+                width: 72px;
+                height: 72px;
+                object-fit: contain;
+                border-radius: 18px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
         </style>
     </head>
     <body class="min-h-screen font-sans antialiased">
         <main class="flex min-h-screen items-center justify-center px-4 py-12">
             <div class="login-container w-full max-w-md space-y-8 p-8">
                 <div class="logo-container">
-                    <img src="{{ asset('storage/logo/logotomohon.png') }}" 
-         alt="Logo Posting Dasi" 
-         class="logo-image">
+                    <x-app-logos class="logo-stack justify-center gap-4" placeholder />
                 </div>
                 
                 <div class="space-y-2 text-center">

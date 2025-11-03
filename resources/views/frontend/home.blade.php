@@ -31,12 +31,13 @@
         <div class="mx-auto max-w-6xl px-6">
             <div class="flex items-center justify-between h-16 lg:h-20">
                 <!-- Logo -->
-                <div class="flex items-center gap-3">
-                    <img src="{{ asset('storage/logo/logotomohon.png') }}" 
-                         alt="Logo Posting Dasi" 
-                         class="w-10 h-10 lg:w-12 lg:h-12 object-contain">
+                <div class="flex items-center gap-4">
+                    <x-app-logos size="w-9 h-9 lg:w-11 lg:h-11" secondary-size="w-9 h-9 lg:w-11 lg:h-11" gap-class="gap-2" placeholder />
                     <div class="flex flex-col">
-                        <span class="text-lg lg:text-xl font-bold text-slate-900">Posting Dasi</span>
+                        <span class="text-lg lg:text-xl font-bold text-slate-900">
+                            <span class="text-red-600">Posting</span>
+                            <span class="text-blue-600">Dasi</span>
+                        </span>
                         <span class="text-xs text-slate-500 -mt-1">Pojok Stunting Digital Terintegrasi</span>
                     </div>
                 </div>
@@ -100,9 +101,10 @@
             <div class="text-center">
                 <div class="inline-flex items-center gap-3 rounded-2xl bg-white/80 backdrop-blur-sm border border-slate-200 px-6 py-3 shadow-sm mb-8"></div>
                 <h1 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
-                    Pusat Edukasi & 
-                    <span class="bg-gradient-to-r from-red-600 to-rose-600 bg-clip-text text-transparent">Konsultasi</span>
+                    <span class="inline-block text-red-600">Posting</span>
+                    <span class="inline-block text-blue-600">Dasi</span>
                 </h1>
+                <p class="mt-3 text-lg sm:text-xl text-slate-600">(Pojok Stunting Digital Terintegrasi)</p>
                 <p class="mx-auto mt-6 max-w-2xl text-xl text-slate-600 leading-relaxed">
                     Jelajahi berbagai konten edukasi berkualitas dan dapatkan konsultasi profesional 
                     untuk pencegahan stunting di Kota Tomohon.
@@ -556,9 +558,11 @@
 
                         <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                             <div class="flex-1">
-                                {!! NoCaptcha::display() !!}
-                                @error('g-recaptcha-response') <p class="mt-1 text-sm text-red-300">{{ $message }}</p> @enderror
-                            </div>
+                                    @if (app()->bound('captcha'))
+                                        {!! app('captcha')->display() !!}
+                                    @endif
+                                    @error('g-recaptcha-response') <p class="mt-1 text-sm text-red-300">{{ $message }}</p> @enderror
+                                </div>
 
                             <button type="submit"
                                     class="inline-flex items-center gap-3 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-red-500/25 transition-all duration-200 hover:from-red-700 hover:to-rose-700 hover:shadow-xl hover:shadow-red-500/40 hover:-translate-y-0.5">
@@ -595,10 +599,8 @@
             </div>
         </div>
     </div>
-
-    @push('scripts')
-        @if (config('captcha.secret'))
-            {!! NoCaptcha::renderJs() !!}
+        @if (app()->bound('captcha'))
+            {!! app('captcha')->renderJs() !!}
         @endif
 
         <script>
