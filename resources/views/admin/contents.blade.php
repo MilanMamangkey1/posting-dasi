@@ -174,25 +174,28 @@
                                 Konten Terdaftar
                             </h3>
                         </header>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full text-left text-sm text-slate-700">
-                                <thead class="border-b border-slate-200 text-xs font-semibold uppercase text-red-600">
-                                    <tr>
-                                        <th class="px-3 py-2">Judul</th>
-                                        <th class="px-3 py-2">Jenis</th>
-                                        <th class="px-3 py-2">Ringkasan</th>
-                                        <th class="px-3 py-2">Tanggal Upload</th>
-                                        <th class="px-3 py-2 text-right">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-200">
-                                    @forelse ($contents as $content)
+                        <div class="overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-slate-200 text-left text-sm text-slate-700">
+                                    <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-600">
                                         <tr>
-                                            <td class="px-3 py-3 font-medium text-slate-900">
+                                            <th class="px-4 py-3">Judul</th>
+                                            <th class="px-4 py-3">Jenis</th>
+                                            <th class="px-4 py-3">Ringkasan</th>
+                                            <th class="px-4 py-3">Tanggal Upload</th>
+                                            <th class="px-4 py-3 text-right">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-200 bg-white">
+                                        @forelse ($contents as $content)
+                                        <tr class="{{ $loop->even ? 'bg-slate-50' : 'bg-white' }}">
+                                            <td class="align-top px-4 py-4 font-semibold text-slate-900">
                                                 {{ $content->title }}
                                             </td>
-                                        <td class="px-3 py-3 uppercase text-xs text-red-600">{{ $contentTypeLabels[$content->type] ?? ucfirst($content->type) }}</td>
-                                            <td class="px-3 py-3 text-slate-600">
+                                            <td class="align-top px-4 py-4 uppercase text-xs text-red-600">
+                                                {{ $contentTypeLabels[$content->type] ?? ucfirst($content->type) }}
+                                            </td>
+                                            <td class="align-top px-4 py-4 text-slate-600">
                                                 <div>{{ $content->summary ?? '-' }}</div>
                                                 @if ($content->photo_url)
                                                     <a
@@ -233,31 +236,34 @@
                                                         class="mt-3 inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-red-600 hover:text-red-600"
                                                     >
                                                         <span>Unduh {{ strtoupper($content->document_extension ?? 'Berkas') }}</span>
-                                                                @if ($listDocLabel)
-                                                                    <span class="text-red-600">({{ $listDocLabel }})</span>
+                                                        @if ($listDocLabel)
+                                                            <span class="text-red-600">({{ $listDocLabel }})</span>
                                                         @endif
                                                     </a>
                                                 @endif
                                             </td>
-                                            <td class="px-3 py-3 text-sm text-slate-500 whitespace-nowrap">
+                                            <td class="align-top px-4 py-4 text-sm text-slate-500 whitespace-nowrap">
                                                 @php
                                                     $uploadedAt = optional($content->event_date ?? $content->created_at)->format('d/m/Y');
                                                 @endphp
                                                 {{ $uploadedAt ?? '-' }}
                                             </td>
-                                            <td class="px-3 py-3 text-right">
-                                                <details class="inline-block text-left">
-                                                    <summary class="cursor-pointer text-xs font-semibold text-red-600 hover:text-red-600">
+                                            <td class="align-top px-4 py-4 text-right">
+                                                <details class="group inline-block text-left">
+                                                    <summary class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 group-open:text-red-600">
                                                         Kelola
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="h-4 w-4 transition-transform group-open:rotate-180">
+                                                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd" />
+                                                        </svg>
                                                     </summary>
-                                                    <div class="mt-2 space-y-2 rounded-lg border border-slate-200 bg-white p-3 shadow-lg">
+                                                    <div class="mt-2 w-80 space-y-4 rounded-lg border border-slate-200 bg-white p-4 shadow-lg">
                                                         <form method="POST" action="{{ route('admin.contents.destroy', $content) }}" onsubmit="return confirm('Hapus konten ini?');">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="danger-button w-full justify-center text-xs">Hapus</button>
                                                         </form>
 
-                                                        <form method="POST" action="{{ route('admin.contents.update', $content) }}" enctype="multipart/form-data" class="mt-4 space-y-3" data-content-form>
+                                                        <form method="POST" action="{{ route('admin.contents.update', $content) }}" enctype="multipart/form-data" class="space-y-3" data-content-form>
                                                             @csrf
                                                             @method('PUT')
                                                             <input type="hidden" name="type" value="{{ $content->type }}" data-field-control="type">
@@ -354,20 +360,21 @@
                                                 </details>
                                             </td>
                                         </tr>
-                                    @empty
-                                        <tr>
-                                            <td class="px-3 py-4 text-sm text-red-600" colspan="4">
-                                                Belum ada konten terdaftar.
-                                            </td>
-                                        </tr>
-                                    @endforelse
+                                        @empty
+                                            <tr>
+                                                <td class="px-4 py-4 text-sm text-red-600" colspan="5">
+                                                    Belum ada konten terdaftar.
+                                                </td>
+                                            </tr>
+                                        @endforelse
                                 </tbody>
                             </table>
                         </div>
+                    </div>
 
-                        @if ($contents instanceof \Illuminate\Pagination\LengthAwarePaginator)
-                            <div class="mt-4">{{ $contents->withQueryString()->links() }}</div>
-                        @endif
+                    @if ($contents instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                        <div class="mt-4">{{ $contents->withQueryString()->links() }}</div>
+                    @endif
                     </section>
                 </div>
             </section>
