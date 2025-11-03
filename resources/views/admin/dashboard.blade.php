@@ -12,11 +12,8 @@
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.5 3h5.25v5.25H4.5V3zm9.75 0H19.5v5.25h-5.25V3zm0 9.75H19.5V18h-5.25v-5.25zM4.5 12.75H9.75V18H4.5v-5.25z" />
                         </svg>
                     </span>
-                    Website Posting Dasi &mdash; Area Admin
+                    Website Posting Dasi &mdash; Dasbor Admin
                 </h1>
-                <p class="text-sm text-slate-600">
-                    Dashboard sederhana tanpa ketergantungan JavaScript berlebih.
-                </p>
             </div>
         </div>
     </header>

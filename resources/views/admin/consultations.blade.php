@@ -134,9 +134,8 @@
                                                 $greeting .= " {$issueSegment}";
                                             }
                                             $whatsappMessage = $greeting . "\n\n";
-                                            $whatsappMessage .= "Berikut Dibawah ini adalah jawaban dari keluhan anda:\n\n";
                                             $whatsappMessage .= "Jika ada yang ingin ditanyakan lagi jangan sungkan,\n";
-                                            $whatsappMessage .= "Homat Kami DInas PPKBD kota Tomohon";
+                                            $whatsappMessage .= "Hormat Kami Dinas PPKBD kota Tomohon\n\n";
                                             $encodedWhatsappMessage = rawurlencode($whatsappMessage);
 
                                             $statusColors = [
