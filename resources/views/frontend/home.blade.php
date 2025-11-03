@@ -599,6 +599,7 @@
             </div>
         </div>
     </div>
+        @push('scripts')
         @if (app()->bound('captcha'))
             {!! app('captcha')->renderJs() !!}
         @endif
