@@ -310,8 +310,39 @@
                                                 <p class="mt-3 text-slate-600 leading-relaxed">{{ $narrative->summary }}</p>
                                             @endif
                                             @if ($narrative->body)
-                                                <div class="mt-4 p-4 bg-green-50 rounded-xl border border-green-200">
-                                                    <p class="whitespace-pre-line text-slate-700 leading-relaxed">{{ $narrative->body }}</p>
+                                                @php
+                                                    $narrativeBody = (string) $narrative->body;
+                                                    $narrativePreviewLimit = 100;
+                                                    $narrativeBodyLength = \Illuminate\Support\Str::length($narrativeBody);
+                                                    $narrativeShouldTruncate = $narrativeBodyLength > $narrativePreviewLimit;
+                                                    $narrativePreview = $narrativeShouldTruncate
+                                                        ? \Illuminate\Support\Str::substr($narrativeBody, 0, $narrativePreviewLimit)
+                                                        : $narrativeBody;
+                                                    $narrativeRemainder = $narrativeShouldTruncate
+                                                        ? \Illuminate\Support\Str::substr($narrativeBody, $narrativePreviewLimit)
+                                                        : '';
+                                                    $narrativeContentId = 'narrative-body-' . $loop->index;
+                                                @endphp
+                                                <div class="mt-4 p-4 bg-green-50 rounded-xl border border-green-200" data-narrative-container>
+                                                    <p id="{{ $narrativeContentId }}" class="whitespace-pre-line text-slate-700 leading-relaxed">
+                                                        <span data-narrative-preview>{{ $narrativePreview }}</span>
+                                                        @if ($narrativeShouldTruncate)
+                                                            <span data-narrative-dots>...</span>
+                                                            <span class="hidden" data-narrative-remaining>{{ $narrativeRemainder }}</span>
+                                                        @endif
+                                                    </p>
+                                                    @if ($narrativeShouldTruncate)
+                                                        <button type="button"
+                                                            class="mt-3 inline-flex items-center gap-2 rounded-lg bg-green-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-green-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
+                                                            data-narrative-toggle
+                                                            data-target="{{ $narrativeContentId }}"
+                                                            aria-expanded="false">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor">
+                                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                            </svg>
+                                                            <span data-narrative-toggle-text>Lihat selengkapnya</span>
+                                                        </button>
+                                                    @endif
                                                 </div>
                                             @endif
                                         </div>
@@ -589,6 +620,45 @@
                         const target = document.querySelector(this.getAttribute('href'));
                         if (target) {
                             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    });
+                });
+
+                // Narrative expand/collapse
+                document.querySelectorAll('[data-narrative-toggle]').forEach(button => {
+                    button.addEventListener('click', function () {
+                        const targetId = this.getAttribute('data-target');
+                        if (!targetId) {
+                            return;
+                        }
+
+                        const content = document.getElementById(targetId);
+                        if (!content) {
+                            return;
+                        }
+
+                        const remaining = content.querySelector('[data-narrative-remaining]');
+                        const dots = content.querySelector('[data-narrative-dots]');
+                        const label = this.querySelector('[data-narrative-toggle-text]');
+                        const icon = this.querySelector('svg');
+
+                        const nextExpanded = this.getAttribute('aria-expanded') !== 'true';
+                        this.setAttribute('aria-expanded', nextExpanded ? 'true' : 'false');
+
+                        if (remaining) {
+                            remaining.classList.toggle('hidden', !nextExpanded);
+                        }
+
+                        if (dots) {
+                            dots.classList.toggle('hidden', nextExpanded);
+                        }
+
+                        if (label) {
+                            label.textContent = nextExpanded ? 'Sembunyikan' : 'Lihat selengkapnya';
+                        }
+
+                        if (icon) {
+                            icon.classList.toggle('rotate-180', nextExpanded);
                         }
                     });
                 });
