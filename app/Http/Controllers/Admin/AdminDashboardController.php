@@ -92,7 +92,20 @@ SQL;
                     ConsultationRequest::STATUS_ARCHIVED,
                 ]
             )
-            ->latest();
+            ->latest()
+            ->select([
+                'id',
+                'full_name',
+                'address',
+                'issue_description',
+                'whatsapp_number',
+                'status',
+                'admin_notes',
+                'handled_at',
+                'handled_by',
+                'created_at',
+                'updated_at',
+            ]);
         if ($consultationFilters['status']) {
             $consultationsQuery->where('status', $consultationFilters['status']);
         }
@@ -109,24 +122,32 @@ SQL;
         ];
 
         $searchTerm = $consultationFilters['search'];
-        $consultations = $consultationsQuery->get();
-        if ($searchTerm) {
-            $normalizedSearch = $this->normalizeDigits($searchTerm);
-            $consultations = $consultations->filter(function ($item) use ($searchTerm, $normalizedSearch) {
-                $nameMatch = stripos($item->full_name ?? '', $searchTerm) !== false;
+        $normalizedDigits = $this->normalizeDigits($searchTerm);
+
+        if ($searchTerm && $normalizedDigits === '') {
+            $consultationsQuery->where('full_name', 'like', '%' . $searchTerm . '%');
+        }
+
+        if ($normalizedDigits !== '') {
+            $consultations = $consultationsQuery->get()->filter(function ($item) use ($searchTerm, $normalizedDigits) {
+                $nameMatch = $searchTerm !== null && stripos($item->full_name ?? '', $searchTerm) !== false;
                 $numberMatch = false;
 
-                if ($normalizedSearch !== '') {
-                    $sanitizedNumber = $this->normalizeDigits($item->whatsapp_number ?? '');
-                    $numberMatch = str_contains($sanitizedNumber, $normalizedSearch);
+                $sanitizedNumber = $this->normalizeDigits($item->whatsapp_number ?? '');
+                if ($sanitizedNumber !== '') {
+                    $numberMatch = str_contains($sanitizedNumber, $normalizedDigits);
                 }
 
                 return $nameMatch || $numberMatch;
             })->values();
-        }
 
-        $paginatedConsultations = $this->paginateCollection($consultations, 10, (int) $request->query('page', 1));
-        $paginatedConsultations->appends($request->except('page'));
+            $paginatedConsultations = $this->paginateCollection($consultations, 10, (int) $request->query('page', 1));
+            $paginatedConsultations->appends($request->except('page'));
+        } else {
+            $paginatedConsultations = $consultationsQuery
+                ->paginate(10)
+                ->appends($request->except('page'));
+        }
 
         return view('admin.consultations', [
             'consultations' => $paginatedConsultations,
@@ -145,27 +166,52 @@ SQL;
             'search' => $request->query('archive_search'),
         ];
 
-        $archivesQuery = ArchivedConsultationRequest::query()->latest('archived_at');
+        $archivesQuery = ArchivedConsultationRequest::query()
+            ->latest('archived_at')
+            ->select([
+                'id',
+                'consultation_request_id',
+                'full_name',
+                'address',
+                'issue_description',
+                'whatsapp_number',
+                'status',
+                'admin_notes',
+                'handled_at',
+                'handled_by',
+                'resolved_at',
+                'archived_at',
+                'created_at',
+                'updated_at',
+            ]);
 
-        $archives = $archivesQuery->get();
-        if ($filters['search']) {
-            $searchTerm = $filters['search'];
-            $normalizedSearch = $this->normalizeDigits($searchTerm);
-            $archives = $archives->filter(function ($item) use ($searchTerm, $normalizedSearch) {
-                $nameMatch = stripos($item->full_name ?? '', $searchTerm) !== false;
+        $searchTerm = $filters['search'];
+        $normalizedDigits = $this->normalizeDigits($searchTerm);
+
+        if ($searchTerm && $normalizedDigits === '') {
+            $archivesQuery->where('full_name', 'like', '%' . $searchTerm . '%');
+        }
+
+        if ($normalizedDigits !== '') {
+            $archives = $archivesQuery->get()->filter(function ($item) use ($searchTerm, $normalizedDigits) {
+                $nameMatch = $searchTerm !== null && stripos($item->full_name ?? '', $searchTerm) !== false;
                 $numberMatch = false;
 
-                if ($normalizedSearch !== '') {
-                    $sanitizedNumber = $this->normalizeDigits($item->whatsapp_number ?? '');
-                    $numberMatch = str_contains($sanitizedNumber, $normalizedSearch);
+                $sanitizedNumber = $this->normalizeDigits($item->whatsapp_number ?? '');
+                if ($sanitizedNumber !== '') {
+                    $numberMatch = str_contains($sanitizedNumber, $normalizedDigits);
                 }
 
                 return $nameMatch || $numberMatch;
             })->values();
-        }
 
-        $paginatedArchives = $this->paginateCollection($archives, 10, (int) $request->query('page', 1));
-        $paginatedArchives->appends($request->except('page'));
+            $paginatedArchives = $this->paginateCollection($archives, 10, (int) $request->query('page', 1));
+            $paginatedArchives->appends($request->except('page'));
+        } else {
+            $paginatedArchives = $archivesQuery
+                ->paginate(10)
+                ->appends($request->except('page'));
+        }
 
         return view('admin.consultations-archive', [
             'archives' => $paginatedArchives,

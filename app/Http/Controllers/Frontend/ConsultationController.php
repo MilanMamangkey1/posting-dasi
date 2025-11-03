@@ -8,29 +8,11 @@ use App\Mail\NewConsultationRequestMail;
 use App\Models\ConsultationRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Mail;
-use Anhskohbo\NoCaptcha\Facades\NoCaptcha;
-use Illuminate\Validation\ValidationException;
 
 class ConsultationController extends Controller
 {
     public function store(StoreConsultationRequest $request): RedirectResponse
     {
-        // === VALIDASI reCAPTCHA SECARA MANUAL (karena Form Request tidak otomatis validasi NoCaptcha) ===
-        $recaptchaResponse = $request->input('g-recaptcha-response');
-
-        if (empty($recaptchaResponse)) {
-            throw ValidationException::withMessages([
-                'g-recaptcha-response' => 'Silakan centang reCAPTCHA terlebih dahulu.',
-            ]);
-        }
-
-        // Verifikasi ke Google
-        if (!NoCaptcha::verifyResponse($recaptchaResponse)) {
-            throw ValidationException::withMessages([
-                'g-recaptcha-response' => 'Verifikasi reCAPTCHA gagal. Coba lagi.',
-            ]);
-        }
-
         // === PROSES PENYIMPANAN ===
         $consultation = ConsultationRequest::create([
             'full_name'         => $request->input('full_name'),

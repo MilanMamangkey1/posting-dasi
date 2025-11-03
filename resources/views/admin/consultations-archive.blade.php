@@ -78,9 +78,41 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-200 bg-white">
+                                @php
+                                    $decryptArchiveValue = static function (?string $value) {
+                                        if ($value === null || $value === '') {
+                                            return $value;
+                                        }
+
+                                        try {
+                                            return \Illuminate\Support\Facades\Crypt::decryptString($value);
+                                        } catch (\Illuminate\Contracts\Encryption\DecryptException $exception) {
+                                            return $value;
+                                        }
+                                    };
+                                @endphp
                                 @forelse ($archives as $archive)
                                     <tr class="hover:bg-slate-50 transition-colors duration-150 group">
                                         <td class="px-6 py-4">
+                                            @php
+                                                $decryptedWhatsapp = $decryptArchiveValue($archive->getRawOriginal('whatsapp_number'));
+                                                $decryptedIssueDescription = $decryptArchiveValue($archive->getRawOriginal('issue_description'));
+                                                $decryptedAdminNotes = $decryptArchiveValue($archive->getRawOriginal('admin_notes'));
+
+                                                $sanitizedWhatsapp = preg_replace('/[^0-9]/', '', $decryptedWhatsapp ?? '');
+                                                $issueSummary = trim(preg_replace('/\s+/', ' ', $decryptedIssueDescription ?? ''));
+                                                $issueSegment = $issueSummary !== '' ? "({$issueSummary})" : '';
+                                                $greeting = "Halo, {$archive->full_name} kami dari Dinas PPKBD Kota Tomohon akan memberikan konsultasi terkait dengan keluhan anda";
+
+                                                if ($issueSegment !== '') {
+                                                    $greeting .= " {$issueSegment}";
+                                                }
+
+                                                $whatsappMessage = $greeting . "\n\n";
+                                                $whatsappMessage .= "Jika ada yang ingin ditanyakan lagi jangan sungkan,\n";
+                                                $whatsappMessage .= "Hormat Kami Dinas PPKBD kota Tomohon\n\n";
+                                                $encodedWhatsappMessage = rawurlencode($whatsappMessage);
+                                            @endphp
                                             <div class="flex items-start gap-3">
                                                 <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-emerald-100 to-emerald-50 text-emerald-600 shadow-sm">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -89,7 +121,7 @@
                                                 </div>
                                                 <div class="min-w-0 flex-1">
                                                     <div class="font-semibold text-slate-900 truncate">{{ $archive->full_name }}</div>
-                                                    <p class="mt-1 text-xs text-slate-600 line-clamp-2">{{ $archive->issue_description }}</p>
+                                                    <p class="mt-1 text-xs text-slate-600 line-clamp-2">{{ $decryptedIssueDescription }}</p>
                                                 </div>
                                             </div>
                                         </td>
@@ -98,15 +130,23 @@
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
                                                     <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                                                 </svg>
-                                                <span class="font-medium">{{ $archive->whatsapp_number }}</span>
+                                                <span class="font-medium">{{ $decryptedWhatsapp ?? '-' }}</span>
                                             </div>
-                                            @if ($archive->admin_notes)
+                                            @if ($sanitizedWhatsapp)
+                                                <a href="https://wa.me/{{ $sanitizedWhatsapp }}?text={{ $encodedWhatsappMessage }}" target="_blank" rel="noopener" class="mt-2 inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:from-emerald-600 hover:to-emerald-700 hover:shadow-md">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd" />
+                                                    </svg>
+                                                    Hubungi via WhatsApp
+                                                </a>
+                                            @endif
+                                            @if ($decryptedAdminNotes)
                                                 <div class="mt-2 p-2 bg-amber-50 border border-amber-200 rounded-lg">
                                                     <div class="flex items-start gap-2">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                                                             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
                                                         </svg>
-                                                        <p class="text-xs text-amber-800 flex-1">{{ $archive->admin_notes }}</p>
+                                                        <p class="text-xs text-amber-800 flex-1">{{ $decryptedAdminNotes }}</p>
                                                     </div>
                                                 </div>
                                             @endif
