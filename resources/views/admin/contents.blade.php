@@ -488,15 +488,26 @@
                 const toggleFields = function () {
                     const currentType = typeControl.value;
                     fieldGroups.forEach(function (group) {
-                        const allowedTypes = group.dataset.fieldFor.split(' ');
-                        if (currentType && allowedTypes.includes(currentType)) {
-                            group.classList.remove('hidden');
-                        } else {
-                            group.classList.add('hidden');
-                            group.querySelectorAll('input:not([type="file"]), textarea').forEach(function (input) {
-                                input.value = '';
-                            });
-                        }
+                        const allowedTypes = (group.dataset.fieldFor || '').split(' ');
+                        const isActive = currentType && allowedTypes.includes(currentType);
+
+                        group.classList.toggle('hidden', !isActive);
+
+                        group.querySelectorAll('input, textarea, select').forEach(function (input) {
+                            input.disabled = !isActive;
+
+                            if (!isActive) {
+                                if (input.type === 'file') {
+                                    try {
+                                        input.value = '';
+                                    } catch (error) {
+                                        // browsers may block direct assignment; ignore
+                                    }
+                                } else {
+                                    input.value = '';
+                                }
+                            }
+                        });
                     });
                 };
 
