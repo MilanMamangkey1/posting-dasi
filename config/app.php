@@ -53,6 +53,7 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
+    'launch_video_url' => env('PUBLIC_LAUNCH_VIDEO_URL'),
 
     /*
     |--------------------------------------------------------------------------

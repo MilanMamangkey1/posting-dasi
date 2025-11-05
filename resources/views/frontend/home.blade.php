@@ -24,7 +24,42 @@
 
             return $formatted . ' ' . $units[$index];
         };
+
+        $extractYouTubeId = static function (?string $url): ?string {
+            if ($url === null || $url === '') {
+                return null;
+            }
+
+            $pattern = '/(?:youtu\\.be\\/|youtube\\.com\\/(?:shorts\\/|embed\\/|v\\/|watch\\?v=|watch\\?.+&v=))([A-Za-z0-9_-]{11})/i';
+
+            return preg_match($pattern, $url, $matches) ? $matches[1] : null;
+        };
+
+        $launchVideoId = $extractYouTubeId(config('app.launch_video_url'));
     @endphp
+
+    @if ($launchVideoId)
+        <div id="launch-video-overlay"
+             class="fixed inset-0 z-[10000] flex items-center justify-center bg-slate-950/95 px-4 transition-opacity duration-300"
+             role="dialog"
+             aria-modal="true"
+             aria-label="Video peluncuran">
+            <div class="relative w-full max-w-4xl bg-black aspect-video rounded-3xl overflow-hidden shadow-2xl">
+                <div id="launch-video-player"
+                     data-video-id="{{ $launchVideoId }}"
+                     class="h-full w-full"></div>
+                <button id="launch-video-skip"
+                        type="button"
+                        class="absolute top-4 right-4 z-10 inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M12.293 3.293a1 1 0 011.414 0l4.999 5a1 1 0 010 1.414l-5 5a1 1 0 11-1.414-1.414L15.586 10l-3.293-3.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd" d="M2 10a1 1 0 011-1h11v2H3a1 1 0 01-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    Lewati
+                </button>
+            </div>
+        </div>
+    @endif
 
     <!-- Navigation -->
     <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 transition-all duration-300 shadow-sm">
@@ -600,6 +635,128 @@
         </div>
     </div>
         @push('scripts')
+        <script>
+            (function () {
+                const overlay = document.getElementById('launch-video-overlay');
+                if (!overlay) {
+                    return;
+                }
+
+                const skipButton = document.getElementById('launch-video-skip');
+                const playerContainer = document.getElementById('launch-video-player');
+                const body = document.body;
+                const bodyInitiallyLocked = body.classList.contains('overflow-hidden');
+                let overlayDismissed = false;
+                let playerInstance = null;
+
+                const keydownHandler = (event) => {
+                    if (event.key === 'Escape') {
+                        teardown();
+                    }
+                };
+
+                const teardown = () => {
+                    if (overlayDismissed) {
+                        return;
+                    }
+
+                    overlayDismissed = true;
+
+                    if (playerInstance && typeof playerInstance.stopVideo === 'function') {
+                        try {
+                            playerInstance.stopVideo();
+                        } catch (error) {
+                            // ignore stop errors
+                        }
+                    }
+
+                    overlay.classList.add('opacity-0', 'pointer-events-none');
+                    setTimeout(() => overlay.remove(), 300);
+                    if (!bodyInitiallyLocked) {
+                        body.classList.remove('overflow-hidden');
+                    }
+                    document.removeEventListener('keydown', keydownHandler);
+                };
+
+                if (!bodyInitiallyLocked) {
+                    body.classList.add('overflow-hidden');
+                }
+
+                if (skipButton) {
+                    skipButton.addEventListener('click', teardown);
+                    try {
+                        skipButton.focus({ preventScroll: true });
+                    } catch (error) {
+                        // focus optional
+                    }
+                }
+
+                document.addEventListener('keydown', keydownHandler);
+
+                const attachYouTubePlayer = () => {
+                    if (!playerContainer) {
+                        return;
+                    }
+
+                    const videoId = playerContainer.dataset.videoId;
+                    if (!videoId) {
+                        return;
+                    }
+
+                    playerInstance = new YT.Player(playerContainer, {
+                        videoId,
+                        playerVars: {
+                            autoplay: 1,
+                            controls: 1,
+                            rel: 0,
+                            playsinline: 1,
+                            modestbranding: 1,
+                        },
+                        events: {
+                            onReady(event) {
+                                try {
+                                    event.target.mute();
+                                    event.target.playVideo();
+                                } catch (error) {
+                                    // ignore autoplay failures
+                                }
+                            },
+                            onStateChange(event) {
+                                if (event.data === YT.PlayerState.ENDED) {
+                                    teardown();
+                                }
+                            },
+                        },
+                    });
+                };
+
+                const loadYouTubeApi = () => {
+                    if (window.YT && typeof window.YT.Player === 'function') {
+                        attachYouTubePlayer();
+                        return;
+                    }
+
+                    const previousHandler = window.onYouTubeIframeAPIReady;
+                    window.onYouTubeIframeAPIReady = function () {
+                        if (typeof previousHandler === 'function') {
+                            previousHandler();
+                        }
+
+                        attachYouTubePlayer();
+                    };
+
+                    if (!document.getElementById('youtube-iframe-api')) {
+                        const tag = document.createElement('script');
+                        tag.id = 'youtube-iframe-api';
+                        tag.src = 'https://www.youtube.com/iframe_api';
+                        document.head.appendChild(tag);
+                    }
+                };
+
+                loadYouTubeApi();
+            })();
+        </script>
+
         @if (app()->bound('captcha'))
             {!! app('captcha')->renderJs() !!}
         @endif
