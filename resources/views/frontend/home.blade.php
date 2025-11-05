@@ -28,10 +28,10 @@
 
     <!-- Navigation -->
     <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 transition-all duration-300 shadow-sm">
-        <div class="mx-auto max-w-6xl px-6">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6">
             <div class="flex items-center justify-between h-16 lg:h-20">
                 <!-- Logo -->
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-3 sm:gap-4">
                     <x-app-logos size="w-9 h-9 lg:w-11 lg:h-11" secondary-size="w-9 h-9 lg:w-11 lg:h-11" gap-class="gap-2" placeholder />
                     <div class="flex flex-col">
                         <span class="text-lg lg:text-xl font-bold text-slate-900">
@@ -71,7 +71,7 @@
 
         <!-- Mobile Menu -->
         <div class="lg:hidden hidden bg-white border-t border-slate-200 shadow-lg" id="mobile-menu">
-            <div class="px-6 py-4 space-y-4">
+            <div class="px-4 py-4 space-y-4 sm:px-6">
                 <a href="#education-section" class="flex items-center gap-2 text-slate-700 hover:text-red-600 font-medium py-2 transition-colors duration-200">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
@@ -97,26 +97,26 @@
             <div class="absolute bottom-0 right-1/4 w-48 h-48 rounded-full bg-green-200"></div>
         </div>
         
-        <div class="mx-auto max-w-6xl px-6 py-16 relative z-10">
+        <div class="mx-auto max-w-6xl px-4 py-14 relative z-10 sm:px-6 sm:py-16">
             <div class="text-center">
                 <div class="inline-flex items-center gap-3 rounded-2xl bg-white/80 backdrop-blur-sm border border-slate-200 px-6 py-3 shadow-sm mb-8"></div>
-                <h1 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+                <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
                     <span class="inline-block text-red-600">Posting</span>
                     <span class="inline-block text-blue-600">Dasi</span>
                 </h1>
-                <p class="mt-3 text-lg sm:text-xl text-slate-600">(Pojok Stunting Digital Terintegrasi)</p>
-                <p class="mx-auto mt-6 max-w-2xl text-xl text-slate-600 leading-relaxed">
+                <p class="mt-3 text-base text-slate-600 sm:text-xl">(Pojok Stunting Digital Terintegrasi)</p>
+                <p class="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">
                     Jelajahi berbagai konten edukasi berkualitas dan dapatkan konsultasi profesional 
                     untuk pencegahan stunting di Kota Tomohon.
                 </p>
                 <div class="mt-10 flex items-center justify-center gap-4 flex-wrap">
-                    <a href="#education-section" class="inline-flex items-center gap-2 rounded-xl bg-red-600 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-red-200 transition-all duration-200 hover:bg-red-700 hover:shadow-xl hover:shadow-red-300 hover:-translate-y-0.5">
+                    <a href="#education-section" class="inline-flex items-center gap-2 rounded-xl bg-red-600 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-red-200 transition-all duration-200 hover:-translate-y-0.5 hover:bg-red-700 hover:shadow-xl hover:shadow-red-300 sm:px-8 sm:py-4 sm:text-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
                         </svg>
                         Jelajahi Konten
                     </a>
-                    <a href="#consultation-section" class="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-8 py-4 text-lg font-semibold text-slate-700 shadow-lg shadow-slate-200 transition-all duration-200 hover:bg-slate-50 hover:shadow-xl hover:shadow-slate-300 hover:-translate-y-0.5">
+                    <a href="#consultation-section" class="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3 text-base font-semibold text-slate-700 shadow-lg shadow-slate-200 transition-all duration-200 hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-xl hover:shadow-slate-300 sm:px-8 sm:py-4 sm:text-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd" />
                         </svg>
@@ -127,17 +127,17 @@
         </div>
     </section>
 
-    <main class="mx-auto max-w-6xl px-6 py-16">
+    <main class="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-16">
         <!-- Education Content Section -->
         <section id="education-section" class="mb-20">
-            <div class="text-center mb-12">
+            <div class="mb-12 text-center">
                 <div class="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-red-500 to-rose-500 text-white shadow-lg mb-4 mx-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
                     </svg>
                 </div>
-                <h2 class="text-3xl font-bold text-slate-900 sm:text-4xl">Konten Edukasi</h2>
-                <p class="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
+                <h2 class="text-2xl font-bold text-slate-900 sm:text-4xl">Konten Edukasi</h2>
+                <p class="mt-4 mx-auto max-w-2xl text-base text-slate-600 sm:text-lg">
                     Temukan berbagai materi pembelajaran dalam format yang beragam.
                 </p>
             </div>
@@ -155,28 +155,28 @@
             @else
                 <!-- Videos Section -->
                 @if ($videos->isNotEmpty())
-                    <div class="mb-16 rounded-3xl bg-gradient-to-br from-purple-50 to-purple-100 p-8 shadow-lg">
-                        <div class="flex items-center gap-4 mb-8">
+                    <div class="mb-16 rounded-3xl bg-gradient-to-br from-purple-50 to-purple-100 p-6 shadow-lg sm:p-8">
+                        <div class="mb-8 flex flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:text-left">
                             <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
                                     <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
                                 </svg>
                             </div>
-                            <div>
+                            <div class="text-center sm:text-left">
                                 <h3 class="text-2xl font-bold text-slate-900">Video Edukasi</h3>
                                 <p class="text-slate-600">Belajar melalui konten video yang informatif</p>
                             </div>
                         </div>
-                        <div class="grid gap-8 lg:grid-cols-2">
+                        <div class="grid gap-8 md:grid-cols-2">
                             @foreach ($videos as $video)
                                 <article class="group rounded-2xl border border-purple-200 bg-white p-6 shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                                    <div class="flex items-start gap-4">
+                                    <div class="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
                                         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-100 text-purple-600 flex-shrink-0">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
                                                 <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
                                             </svg>
                                         </div>
-                                        <div class="flex-1 min-w-0">
+                                        <div class="flex-1 min-w-0 text-center sm:text-left">
                                             <h4 class="text-xl font-semibold text-slate-900 group-hover:text-purple-600 transition-colors duration-200">{{ $video->title }}</h4>
                                             @if ($video->summary)
                                                 <p class="mt-3 text-slate-600 leading-relaxed">{{ $video->summary }}</p>
@@ -212,28 +212,28 @@
 
                 <!-- Photos Section -->
                 @if ($photos->isNotEmpty())
-                    <div class="mb-16 rounded-3xl bg-gradient-to-br from-blue-50 to-blue-100 p-8 shadow-lg">
-                        <div class="flex items-center gap-4 mb-8">
+                    <div class="mb-16 rounded-3xl bg-gradient-to-br from-blue-50 to-blue-100 p-6 shadow-lg sm:p-8">
+                        <div class="mb-8 flex flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:text-left">
                             <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
                                 </svg>
                             </div>
-                            <div>
+                            <div class="text-center sm:text-left">
                                 <h3 class="text-2xl font-bold text-slate-900">Galeri Foto</h3>
                                 <p class="text-slate-600">Visualisasi pembelajaran melalui gambar</p>
                             </div>
                         </div>
                         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                             @foreach ($photos as $photo)
-                                <article class="group rounded-2xl border border-blue-200 bg-white p-6 shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                                    <div class="flex items-center gap-2 mb-3">
+                                <article class="group rounded-2xl border border-blue-200 bg-white p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+                                    <div class="mb-4 flex flex-col items-center gap-2 text-center sm:flex-row sm:items-center sm:gap-3 sm:text-left">
                                         <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
                                             </svg>
                                         </div>
-                                        <h4 class="text-lg font-semibold text-slate-900">{{ $photo->title }}</h4>
+                                        <h4 class="text-lg font-semibold text-slate-900 text-center sm:text-left">{{ $photo->title }}</h4>
                                     </div>
                                     @if ($photo->summary)
                                         <p class="text-slate-600 text-sm mb-4">{{ $photo->summary }}</p>
@@ -285,28 +285,28 @@
 
                 <!-- Narratives Section -->
                 @if ($narratives->isNotEmpty())
-                    <div class="mb-16 rounded-3xl bg-gradient-to-br from-green-50 to-green-100 p-8 shadow-lg">
-                        <div class="flex items-center gap-4 mb-8">
+                    <div class="mb-16 rounded-3xl bg-gradient-to-br from-green-50 to-green-100 p-6 shadow-lg sm:p-8">
+                        <div class="mb-8 flex flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:text-left">
                             <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
                                 </svg>
                             </div>
-                            <div>
+                            <div class="text-center sm:text-left">
                                 <h3 class="text-2xl font-bold text-slate-900">Narasi Edukasi</h3>
                                 <p class="text-slate-600">Pembelajaran melalui cerita dan penjelasan tertulis</p>
                             </div>
                         </div>
-                        <div class="grid gap-6">
+                        <div class="grid gap-6 md:grid-cols-2">
                             @foreach ($narratives as $narrative)
-                                <article class="group rounded-2xl border border-green-200 bg-white p-8 shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                                    <div class="flex items-start gap-6">
+                                <article class="group rounded-2xl border border-green-200 bg-white p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:p-8">
+                                    <div class="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
                                         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-green-100 text-green-600 flex-shrink-0">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H6z" clip-rule="evenodd" />
                                             </svg>
                                         </div>
-                                        <div class="flex-1 min-w-0">
+                                        <div class="flex-1 min-w-0 text-center sm:text-left">
                                             <h4 class="text-xl font-semibold text-slate-900 group-hover:text-green-600 transition-colors duration-200">{{ $narrative->title }}</h4>
                                             @if ($narrative->summary)
                                                 <p class="mt-3 text-slate-600 leading-relaxed">{{ $narrative->summary }}</p>
@@ -363,28 +363,28 @@
 
                 <!-- Materials Section -->
                 @if ($materials->isNotEmpty())
-                    <div class="mb-16 rounded-3xl bg-gradient-to-br from-amber-50 to-amber-100 p-8 shadow-lg">
-                        <div class="flex items-center gap-4 mb-8">
+                    <div class="mb-16 rounded-3xl bg-gradient-to-br from-amber-50 to-amber-100 p-6 shadow-lg sm:p-8">
+                        <div class="mb-8 flex flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:text-left">
                             <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
                                 </svg>
                             </div>
-                            <div>
+                            <div class="text-center sm:text-left">
                                 <h3 class="text-2xl font-bold text-slate-900">Materi Edukasi</h3>
                                 <p class="text-slate-600">Dokumen dan materi pembelajaran yang dapat diunduh</p>
                             </div>
                         </div>
-                        <div class="grid gap-6 lg:grid-cols-2">
+                        <div class="grid gap-6 md:grid-cols-2">
                             @foreach ($materials as $material)
-                                <article class="group rounded-2xl border border-amber-200 bg-white p-6 shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                                    <div class="flex items-start gap-4">
+                                <article class="group rounded-2xl border border-amber-200 bg-white p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+                                    <div class="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
                                         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-amber-600 flex-shrink-0">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd" />
                                             </svg>
                                         </div>
-                                        <div class="flex-1 min-w-0">
+                                        <div class="flex-1 min-w-0 text-center sm:text-left">
                                             <h4 class="text-lg font-semibold text-slate-900 group-hover:text-amber-600 transition-colors duration-200">{{ $material->title }}</h4>
                                             @if ($material->summary)
                                                 <p class="mt-2 text-slate-600 text-sm">{{ $material->summary }}</p>
@@ -394,8 +394,8 @@
                                                 $materialExtension = $material->document_extension ? strtoupper($material->document_extension) : null;
                                             @endphp
                                             @if ($material->document_url)
-                                                <div class="mt-4 flex items-center justify-between rounded-xl border border-amber-200 bg-white p-4 transition-all duration-200 group-hover:border-amber-300 group-hover:bg-amber-50">
-                                                    <div class="flex items-center gap-3">
+                                                <div class="mt-4 flex flex-col gap-4 rounded-xl border border-amber-200 bg-white p-4 transition-all duration-200 group-hover:border-amber-300 group-hover:bg-amber-50 sm:flex-row sm:items-center sm:justify-between">
+                                                    <div class="flex flex-col items-center gap-3 text-center sm:flex-row sm:items-center sm:text-left">
                                                         <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
                                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                                                 <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -409,7 +409,7 @@
                                                         </div>
                                                     </div>
                                                     <a href="{{ $material->document_url }}" target="_blank" rel="noopener"
-                                                       class="inline-flex items-center gap-2 rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:bg-amber-700 hover:shadow-lg">
+                                                       class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:bg-amber-700 hover:shadow-lg sm:w-auto">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                                                             <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
                                                         </svg>
@@ -438,19 +438,19 @@
         </section>
 
         <!-- Consultation Section -->
-        <section id="consultation-section" class="rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 p-8 shadow-2xl relative overflow-hidden">
+        <section id="consultation-section" class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 p-6 shadow-2xl sm:p-8">
             <div class="absolute top-0 right-0 w-64 h-64 bg-red-500/10 rounded-full -translate-y-32 translate-x-32"></div>
             <div class="absolute bottom-0 left-0 w-48 h-48 bg-amber-500/10 rounded-full -translate-x-24 translate-y-24"></div>
             
             <div class="relative z-10">
-                <div class="text-center mb-10">
+                <div class="mb-10 text-center">
                     <div class="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-red-500 to-rose-500 text-white shadow-lg mb-4 mx-auto">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd" />
                         </svg>
                     </div>
-                    <h2 class="text-3xl font-bold text-white sm:text-4xl">Konsultasi Gratis</h2>
-                    <p class="mt-4 text-lg text-slate-300 max-w-2xl mx-auto">
+                    <h2 class="text-2xl font-bold text-white sm:text-4xl">Konsultasi Gratis</h2>
+                    <p class="mt-4 mx-auto max-w-2xl text-base text-slate-300 sm:text-lg">
                         Dapatkan bimbingan profesional dari tim ahli kami untuk pencegahan stunting.
                     </p>
                 </div>
@@ -470,8 +470,8 @@
                 @endif
 
                 @if ($errors->any())
-                    <div class="mb-6 rounded-2xl border border-red-400 bg-red-50 p-6 text-red-700">
-                        <div class="flex items-center gap-3">
+                    <div class="mb-6 rounded-2xl border border-red-400 bg-red-50 p-5 text-red-700 sm:p-6">
+                        <div class="flex flex-col items-center gap-3 text-center sm:flex-row sm:items-center sm:text-left">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
                             </svg>
@@ -487,10 +487,10 @@
                     @csrf
                     @php($recaptchaKey = config('services.recaptcha.key'))
 
-                    <div class="grid gap-6 lg:grid-cols-2">
+                    <div class="grid gap-6 md:grid-cols-2">
                         <div class="space-y-6">
-                            <div class="rounded-2xl bg-white/10 p-6 backdrop-blur-sm">
-                                <div class="flex items-center gap-3 mb-4">
+                            <div class="rounded-2xl bg-white/10 p-5 backdrop-blur-sm sm:p-6">
+                                <div class="mb-4 flex flex-col items-center gap-3 text-center sm:flex-row sm:items-center sm:text-left">
                                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 text-white">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
@@ -517,8 +517,8 @@
                         </div>
 
                         <div class="space-y-6">
-                            <div class="rounded-2xl bg-white/10 p-6 backdrop-blur-sm">
-                                <div class="flex items-center gap-3 mb-4">
+                            <div class="rounded-2xl bg-white/10 p-5 backdrop-blur-sm sm:p-6">
+                                <div class="mb-4 flex flex-col items-center gap-3 text-center sm:flex-row sm:items-center sm:text-left">
                                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 text-white">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
@@ -546,8 +546,8 @@
                         </div>
                     </div>
 
-                    <div class="rounded-2xl bg-white/10 p-6 backdrop-blur-sm">
-                        <div class="flex items-center gap-3 mb-4">
+                    <div class="rounded-2xl bg-white/10 p-5 backdrop-blur-sm sm:p-6">
+                        <div class="mb-4 flex flex-col items-center gap-3 text-center sm:flex-row sm:items-center sm:text-left">
                             <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 text-white">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
@@ -565,7 +565,7 @@
                                 </div>
 
                             <button type="submit"
-                                    class="inline-flex items-center gap-3 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-red-500/25 transition-all duration-200 hover:from-red-700 hover:to-rose-700 hover:shadow-xl hover:shadow-red-500/40 hover:-translate-y-0.5">
+                                    class="inline-flex w-full items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-red-500/25 transition-all duration-200 hover:-translate-y-0.5 hover:from-red-700 hover:to-rose-700 hover:shadow-xl hover:shadow-red-500/40 lg:w-auto">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                                 </svg>
