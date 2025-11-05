@@ -231,20 +231,44 @@ SQL;
 
         $contentMetrics = array_merge($contentTypes, $contentsByType);
 
-        $consultationStatuses = array_fill_keys(ConsultationRequest::STATUSES, 0);
-        $consultationsByStatus = ConsultationRequest::query()
+        $consultationMetrics = array_fill_keys(ConsultationRequest::STATUSES, 0);
+
+        $activeConsultationCounts = ConsultationRequest::query()
             ->selectRaw('status, COUNT(*) as total')
             ->groupBy('status')
             ->pluck('total', 'status')
-            ->toArray();
+            ->map(static fn ($count) => (int) $count);
 
-        $consultationMetrics = array_merge($consultationStatuses, $consultationsByStatus);
+        foreach ($activeConsultationCounts as $status => $count) {
+            if (array_key_exists($status, $consultationMetrics)) {
+                $consultationMetrics[$status] += $count;
+            }
+        }
+
+        $archivedConsultationCounts = ArchivedConsultationRequest::query()
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status')
+            ->map(static fn ($count) => (int) $count);
+
+        foreach ($archivedConsultationCounts as $status => $count) {
+            if (array_key_exists($status, $consultationMetrics)) {
+                $consultationMetrics[$status] += $count;
+            }
+        }
+
+        $totalActiveConsultations = $activeConsultationCounts->sum();
+        $totalArchivedConsultations = $archivedConsultationCounts->sum();
+
+        $consultationMetrics[ConsultationRequest::STATUS_ARCHIVED] =
+            $activeConsultationCounts->get(ConsultationRequest::STATUS_ARCHIVED, 0)
+            + $totalArchivedConsultations;
 
         return [
             'metrics' => [
                 'total_contents' => array_sum($contentMetrics),
                 'contents_by_type' => $contentMetrics,
-                'total_consultations' => array_sum($consultationMetrics),
+                'total_consultations' => $totalActiveConsultations + $totalArchivedConsultations,
                 'consultations_by_status' => $consultationMetrics,
             ],
             'recent_contents' => EducationalContent::query()
