@@ -40,24 +40,22 @@
 
     @if ($launchVideoId)
         <div id="launch-video-overlay"
-             class="fixed inset-0 z-[10000] flex items-center justify-center bg-slate-950/95 px-4 transition-opacity duration-300"
+             class="fixed inset-0 z-[10000] bg-black transition-opacity duration-300"
              role="dialog"
              aria-modal="true"
              aria-label="Video peluncuran">
-            <div class="relative w-full max-w-4xl bg-black aspect-video rounded-3xl overflow-hidden shadow-2xl">
-                <div id="launch-video-player"
-                     data-video-id="{{ $launchVideoId }}"
-                     class="h-full w-full"></div>
-                <button id="launch-video-skip"
-                        type="button"
-                        class="absolute top-4 right-4 z-10 inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M12.293 3.293a1 1 0 011.414 0l4.999 5a1 1 0 010 1.414l-5 5a1 1 0 11-1.414-1.414L15.586 10l-3.293-3.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                        <path fill-rule="evenodd" d="M2 10a1 1 0 011-1h11v2H3a1 1 0 01-1-1z" clip-rule="evenodd" />
-                    </svg>
-                    Lewati
-                </button>
-            </div>
+            <div id="launch-video-player"
+                 data-video-id="{{ $launchVideoId }}"
+                 class="h-full w-full"></div>
+            <button id="launch-video-skip"
+                    type="button"
+                    class="absolute top-6 right-6 z-10 inline-flex items-center gap-2 rounded-full bg-white/95 px-5 py-2 text-sm font-semibold text-slate-900 transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M12.293 3.293a1 1 0 011.414 0l4.999 5a1 1 0 010 1.414l-5 5a1 1 0 11-1.414-1.414L15.586 10l-3.293-3.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M2 10a1 1 0 011-1h11v2H3a1 1 0 01-1-1z" clip-rule="evenodd" />
+                </svg>
+                Lewati
+            </button>
         </div>
     @endif
 
@@ -704,6 +702,8 @@
                     }
 
                     playerInstance = new YT.Player(playerContainer, {
+                        height: '100%',
+                        width: '100%',
                         videoId,
                         playerVars: {
                             autoplay: 1,
